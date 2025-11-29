@@ -476,7 +476,7 @@ Feel free to suggest more ideas in [Issues](https://github.com/ifeitao/hugo-them
 ## 🔗 Links
 
 - **Theme Repository**: https://github.com/ifeitao/hugo-theme-resound
-- **Example Site**: https://ifeitao.com
+- **Example Site**: https://yifeitao.com/hugo-theme-resound/
 - **Hugo Official Documentation**: https://gohugo.io/documentation/
 
 ---

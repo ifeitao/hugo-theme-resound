@@ -475,7 +475,7 @@ Copyright (c) 2024 ifeitao
 ## 🔗 链接
 
 - **主题仓库**: https://github.com/ifeitao/hugo-theme-resound
-- **示例站点**: https://ifeitao.com
+- **示例站点**: https://yifeitao.com/hugo-theme-resound/
 - **Hugo 官方文档**: https://gohugo.io/documentation/
 
 ---

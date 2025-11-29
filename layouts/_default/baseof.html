@@ -26,9 +26,9 @@
     {{ $scssInput := slice $dynamicVars $mainScss | resources.Concat "css/main.generated.scss" }}
     {{ $scssOptions := dict "targetPath" "css/main.css" "enableSourceMap" false }}
     {{ $styles := $scssInput | css.Sass $scssOptions | resources.Minify | resources.Fingerprint }}
-    <link rel="stylesheet" href="{{ $styles.Permalink }}" integrity="{{ $styles.Data.Integrity }}"> 
+    <link rel="stylesheet" href="{{ $styles.Permalink }}" integrity="{{ $styles.Data.Integrity }}" crossorigin="anonymous"> 
     {{ $syntax := resources.Get "css/_syntax.scss" | css.Sass | resources.Minify | resources.Fingerprint }}
-    <link rel="stylesheet" href="{{ $syntax.Permalink }}" integrity="{{ $syntax.Data.Integrity }}"> 
+    <link rel="stylesheet" href="{{ $syntax.Permalink }}" integrity="{{ $syntax.Data.Integrity }}" crossorigin="anonymous"> 
     {{ if .Site.Params.enable_lxgw_wenkai }}
     <link rel="stylesheet" href="{{ .Site.Params.lxgw_wenkai_cdn }}">
     {{ end }}

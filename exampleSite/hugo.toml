@@ -6,6 +6,10 @@ title = 'Resound 主题示例站点'
 # Use 'resound' when theme is in parent themes/ directory
 theme = 'resound'
 
+# Output formats for search
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
 # Multi-language configuration
 [languages]
   [languages.zh-cn]

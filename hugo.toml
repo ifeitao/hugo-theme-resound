@@ -31,6 +31,7 @@ enableEmoji = true
   priority = 0.5
 
 [params]
+  logo = '/logo.png'
   # Default content settings
   recent_post = 10
   

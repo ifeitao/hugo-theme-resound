@@ -19,7 +19,7 @@ theme = 'resound'
 [params]
   slogan = 'Make Your Content Resound - 让你的内容产生回响'
   author = 'Resound Theme'
-  logo = 'logo.png'
+  logo = '/logo.png'
   addition = '</br>一个优雅的Hugo博客主题'
   
   # Navigation

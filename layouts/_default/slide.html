@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.LanguageCode }}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }} - {{ .Site.Title }}</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/{{ .Params.theme | default "black" }}.css">
+    
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/monokai.css">
+    
+    <style>
+        .reveal .slides {
+            text-align: left;
+        }
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            {{ $content := .Content }}
+            {{ $content = replace $content "<p>..</p>" "</section><section>" }}
+            {{ $content = replace $content "<p>...</p>" "</section></section><section><section>" }}
+            {{ $content = replace $content "<p>…</p>" "</section></section><section><section>" }}
+            
+            <section><section>
+            {{ if .Params.titlepage }}
+                <h1>{{ .Title }}</h1>
+                {{ if .Params.author }}
+                <p>{{ .Params.author }}</p>
+                {{ end }}
+                {{ if .Date }}
+                <p>{{ .Date.Format "2006-01-02" }}</p>
+                {{ end }}
+            </section><section>
+            {{ end }}
+            
+            {{ $content | safeHTML }}
+            
+            </section></section>
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/zoom/zoom.js"></script>
+    
+    {{ if .Params.mathjax }}
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/math/math.js"></script>
+    {{ end }}
+
+    <script>
+        // More info about initialization & config:
+        // - https://revealjs.com/initialization/
+        // - https://revealjs.com/config/
+        Reveal.initialize({
+            hash: true,
+            transition: '{{ .Params.transition | default "slide" }}',
+            {{ if .Params.mathjax }}
+            math: {
+                mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js',
+                config: 'TeX-AMS_HTML-full',
+            },
+            {{ end }}
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [ 
+                RevealMarkdown, 
+                RevealHighlight, 
+                RevealNotes,
+                RevealZoom
+                {{ if .Params.mathjax }}, RevealMath.MathJax3{{ end }}
+            ]
+        });
+    </script>
+</body>
+</html>

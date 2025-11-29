@@ -1,0 +1,60 @@
+# Resound Theme Default Configuration
+
+# Enable emoji support
+enableEmoji = true
+
+# Pagination
+[pagination]
+  pagerSize = 10
+  path = 'page'
+
+# Taxonomies
+[taxonomies]
+  category = 'categories'
+  tag = 'tags'
+
+# Output formats
+[outputs]
+  home = ['HTML', 'RSS', 'JSON']
+  section = ['HTML', 'RSS']
+
+# Markup / syntax highlight
+[markup]
+  [markup.highlight]
+    noClasses = false
+    style = 'github'
+
+# Sitemap configuration
+[sitemap]
+  changefreq = 'weekly'
+  filename = 'sitemap.xml'
+  priority = 0.5
+
+[params]
+  # Default content settings
+  recent_post = 10
+  
+  # Theme colors
+  theme_color = '#d85916'
+  secondary_color = '#530000'
+  link_color = '#d85916'
+  theme_color_dark = '#3e9dc6'
+  secondary_color_dark = '#9dffff'
+  dark_link_color = '#3e9dc6'
+
+  # Font configuration
+  enable_lxgw_wenkai = true
+  lxgw_wenkai_cdn = 'https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.min.css'
+  
+  # Comment system defaults (Giscus)
+  [params.giscus]
+    # Theme names follow https://giscus.app/themes
+    theme_light = 'light'
+    theme_dark = 'dark_dimmed'
+  
+  # Mermaid configuration (on-demand loading)
+  [params.mermaid]
+    startOnLoad = true
+    theme = 'default'
+    securityLevel = 'loose'
+    autoDark = true

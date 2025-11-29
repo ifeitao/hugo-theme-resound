@@ -1,0 +1,20 @@
+{{/* 
+  Article expiration warning template
+  Check the lastmod field and show a warning if the article is outdated
+*/}}
+
+{{ if .Params.lastmod }}
+  {{ $lastmod := time .Params.lastmod }}
+  {{ $now := now }}
+  {{ $daysSinceLastMod := div (sub $now.Unix $lastmod.Unix) 86400 }}
+  {{ $expireDays := .Site.Params.expire_days | default 365 }}
+  
+  {{ if gt $daysSinceLastMod $expireDays }}
+    {{ $yearsSinceLastMod := div $daysSinceLastMod 365 }}
+    <div class="article-expiration-warning">
+      <p class="expiration-warning">
+        <strong>⚠️ {{ printf (i18n "expireWarning") ($lastmod.Format "2006-01-02") $yearsSinceLastMod | safeHTML }}</strong>
+      </p>
+    </div>
+  {{ end }}
+{{ end }}

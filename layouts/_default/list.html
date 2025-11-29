@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="page">
+  <h1 class="page-title">{{ .Title }}</h1>
+  <article>{{ .Content }}</article>
+  <div class="social-share"></div>
+  
+  {{ if and .Params.comment .Site.Params.comments_provider }}
+  <hr>
+  {{ partial "comments.html" . }}
+  {{ end }}
+</div>
+
+{{ if .Params.toc }}
+{{ partial "toc.html" . }}
+{{ end }}
+{{ end }}

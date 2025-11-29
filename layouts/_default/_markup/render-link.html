@@ -1,0 +1,11 @@
+{{- /* Render hook for Markdown links */ -}}
+{{- $dest := .Destination | safeURL -}}
+{{- $title := .Title -}}
+{{- $text := .Text -}}
+{{- $base := .Page.Site.BaseURL -}}
+{{- $isAbs := or (hasPrefix $dest "http://") (hasPrefix $dest "https://") -}}
+{{- $isExternal := and $isAbs (not (hasPrefix $dest $base)) -}}
+{{- $targetBlank := .Page.Site.Params.externalLinksTargetBlank | default true -}}
+
+<a href="{{ $dest }}"{{ with $title }} title="{{ . }}"{{ end }}
+  {{ if $isExternal }} rel="noopener noreferrer"{{ if $targetBlank }} target="_blank"{{ end }} class="external"{{ end }}>{{ $text | safeHTML }}</a>

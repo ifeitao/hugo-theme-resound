@@ -1,0 +1,23 @@
+# Theme metadata
+name = "Resound"
+license = "MIT"
+licenselink = "https://github.com/ifeitao/hugo-theme-resound/blob/main/LICENSE"
+description = "Make Your Content Resound - 让你的内容产生回响。A Hugo blog theme with slides, archives, search and more."
+homepage = "https://github.com/ifeitao/hugo-theme-resound"
+tags = ["blog", "personal", "responsive", "minimal", "clean", "sidebar"]
+features = [
+  "responsive", 
+  "sidebar", 
+  "toc", 
+  "search", 
+  "analytics", 
+  "comments", 
+  "archive",
+  "slides",
+  "syntax-highlighting"
+]
+min_version = "0.100.0"
+
+[author]
+  name = "ifeitao"
+  homepage = "https://ifeitao.com"

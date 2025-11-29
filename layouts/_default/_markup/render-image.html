@@ -1,0 +1,13 @@
+{{- /* Render hook for Markdown images */ -}}
+{{- $src := .Destination | safeURL -}}
+{{- $title := .Title -}}
+{{- $alt := .Text | plainify | htmlUnescape | replaceRE "\\s+" " " | trim " " -}}
+{{- if not $alt }}{{ $alt = (path.Base $src) }}{{ end -}}
+{{- $img := .Page.Resources.GetMatch .Destination -}}
+{{- $width := 0 -}}
+{{- $height := 0 -}}
+{{- if $img -}}
+  {{- $width = $img.Width -}}
+  {{- $height = $img.Height -}}
+{{- end -}}
+<img src="{{ $src }}" alt="{{ $alt }}"{{ with $title }} title="{{ . }}"{{ end }} loading="lazy" decoding="async" referrerpolicy="no-referrer"{{ if gt $width 0 }} width="{{ $width }}" height="{{ $height }}"{{ end }} />

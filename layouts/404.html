@@ -1,0 +1,354 @@
+{{ define "main" }}
+<style>
+  .error-page {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  
+  .error-code {
+    font-size: 120px;
+    font-weight: 700;
+    color: #d85916;
+    margin: 0;
+    line-height: 1;
+  }
+  
+  .error-message {
+    font-size: 24px;
+    color: #515151;
+    margin: 20px 0;
+  }
+  
+  .error-description {
+    font-size: 16px;
+    color: #9a9a9a;
+    margin-bottom: 40px;
+  }
+  
+  .game-container {
+    max-width: 600px;
+    margin: 40px auto;
+    position: relative;
+  }
+  
+  .game-canvas {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f7f7f7;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+  }
+  
+  .game-info {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #9a9a9a;
+  }
+  
+  .home-link {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 30px;
+    background: #d85916;
+    color: white !important;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.3s;
+  }
+  
+  .home-link:hover {
+    background: #c04d12;
+    color: white !important;
+    text-decoration: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]) .error-message {
+      color: #d0d0d0;
+    }
+    html:not([data-theme="light"]) .game-canvas {
+      background: #1a1a1a;
+      border-color: #333;
+    }
+    html:not([data-theme="light"]) .home-link {
+      background: #3e9dc6;
+    }
+    html:not([data-theme="light"]) .home-link:hover {
+      background: #2d8ab5;
+    }
+  }
+  
+  html[data-theme="dark"] .error-message {
+    color: #d0d0d0;
+  }
+  html[data-theme="dark"] .game-canvas {
+    background: #1a1a1a;
+    border-color: #333;
+  }
+  html[data-theme="dark"] .home-link {
+    background: #3e9dc6;
+  }
+  html[data-theme="dark"] .home-link:hover {
+    background: #2d8ab5;
+  }
+</style>
+
+<div class="error-page">
+  <h1 class="error-code">404</h1>
+  <p class="error-message">页面未找到</p>
+  <p class="error-description">抱歉，您访问的页面不存在。不过，您可以玩一会儿这个小游戏！</p>
+  
+  <div class="game-container">
+    <canvas id="game" class="game-canvas" width="600" height="150"></canvas>
+    <div class="game-info">
+      按空格键开始游戏 | 高分: <span id="highScore">0</span>
+    </div>
+  </div>
+  
+  <a href="{{ .Site.BaseURL }}" class="home-link">返回首页</a>
+</div>
+
+<script>
+// Chrome 恐龙游戏简化版
+(function() {
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  
+  // 游戏状态
+  let gameRunning = false;
+  let gameOver = false;
+  let score = 0;
+  let highScore = localStorage.getItem('dino-highscore') || 0;
+  document.getElementById('highScore').textContent = highScore;
+  
+  // 恐龙
+  const dino = {
+    x: 50,
+    y: 100,
+    width: 20,
+    height: 40,
+    dy: 0,
+    jumpPower: -12,
+    gravity: 0.6,
+    jumping: false
+  };
+  
+  // 障碍物
+  let obstacles = [];
+  let obstacleTimer = 0;
+  let obstacleInterval = 100;
+  
+  // 地面
+  const ground = canvas.height - 20;
+  dino.y = ground - dino.height;
+  
+  // 绘制恐龙
+  function drawDino() {
+    ctx.fillStyle = '#535353';
+    ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+    
+    // 眼睛
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(dino.x + 12, dino.y + 5, 3, 3);
+  }
+  
+  // 绘制障碍物
+  function drawObstacle(obstacle) {
+    ctx.fillStyle = '#535353';
+    ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+  }
+  
+  // 绘制地面
+  function drawGround() {
+    ctx.strokeStyle = '#535353';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, ground + 10);
+    ctx.lineTo(canvas.width, ground + 10);
+    ctx.stroke();
+  }
+  
+  // 绘制分数
+  function drawScore() {
+    ctx.fillStyle = '#535353';
+    ctx.font = '16px monospace';
+    ctx.fillText('分数: ' + Math.floor(score), canvas.width - 100, 30);
+  }
+  
+  // 恐龙跳跃
+  function jump() {
+    if (!dino.jumping && dino.y >= ground - dino.height) {
+      dino.dy = dino.jumpPower;
+      dino.jumping = true;
+    }
+  }
+  
+  // 更新恐龙位置
+  function updateDino() {
+    dino.dy += dino.gravity;
+    dino.y += dino.dy;
+    
+    // 着地
+    if (dino.y >= ground - dino.height) {
+      dino.y = ground - dino.height;
+      dino.dy = 0;
+      dino.jumping = false;
+    }
+  }
+  
+  // 更新障碍物
+  function updateObstacles() {
+    obstacleTimer++;
+    
+    // 生成新障碍物
+    if (obstacleTimer > obstacleInterval) {
+      obstacles.push({
+        x: canvas.width,
+        y: ground - 20,
+        width: 15,
+        height: 20,
+        speed: 5
+      });
+      obstacleTimer = 0;
+      obstacleInterval = Math.max(60, 100 - Math.floor(score / 100));
+    }
+    
+    // 移动并清理障碍物
+    for (let i = obstacles.length - 1; i >= 0; i--) {
+      obstacles[i].x -= obstacles[i].speed;
+      
+      if (obstacles[i].x + obstacles[i].width < 0) {
+        obstacles.splice(i, 1);
+        score += 10;
+      }
+    }
+  }
+  
+  // 碰撞检测
+  function checkCollision() {
+    for (let obstacle of obstacles) {
+      if (dino.x < obstacle.x + obstacle.width &&
+          dino.x + dino.width > obstacle.x &&
+          dino.y < obstacle.y + obstacle.height &&
+          dino.y + dino.height > obstacle.y) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  // 游戏结束
+  function endGame() {
+    gameRunning = false;
+    gameOver = true;
+    
+    if (score > highScore) {
+      highScore = Math.floor(score);
+      localStorage.setItem('dino-highscore', highScore);
+      document.getElementById('highScore').textContent = highScore;
+    }
+    
+    // 显示游戏结束
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 30px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('游戏结束', canvas.width / 2, canvas.height / 2 - 20);
+    ctx.font = '18px Arial';
+    ctx.fillText('按空格键重新开始', canvas.width / 2, canvas.height / 2 + 20);
+    ctx.textAlign = 'left';
+  }
+  
+  // 重置游戏
+  function resetGame() {
+    gameRunning = true;
+    gameOver = false;
+    score = 0;
+    obstacles = [];
+    obstacleTimer = 0;
+    obstacleInterval = 100;
+    dino.y = ground - dino.height;
+    dino.dy = 0;
+    dino.jumping = false;
+  }
+  
+  // 游戏循环
+  function gameLoop() {
+    // 清空画布
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    if (gameRunning) {
+      updateDino();
+      updateObstacles();
+      
+      if (checkCollision()) {
+        endGame();
+      } else {
+        score += 0.1;
+      }
+    }
+    
+    // 绘制
+    drawGround();
+    drawDino();
+    obstacles.forEach(drawObstacle);
+    drawScore();
+    
+    if (!gameRunning && !gameOver) {
+      ctx.fillStyle = '#535353';
+      ctx.font = '20px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('按空格键开始', canvas.width / 2, canvas.height / 2);
+      ctx.textAlign = 'left';
+    }
+    
+    requestAnimationFrame(gameLoop);
+  }
+  
+  // 键盘事件
+  document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (!gameRunning && !gameOver) {
+        resetGame();
+      } else if (gameOver) {
+        resetGame();
+      } else {
+        jump();
+      }
+    }
+  });
+  
+  // 点击画布跳跃
+  canvas.addEventListener('click', function() {
+    if (!gameRunning && !gameOver) {
+      resetGame();
+    } else if (gameOver) {
+      resetGame();
+    } else {
+      jump();
+    }
+  });
+  
+  // 触摸支持（移动端）
+  canvas.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    if (!gameRunning && !gameOver) {
+      resetGame();
+    } else if (gameOver) {
+      resetGame();
+    } else {
+      jump();
+    }
+  });
+  
+  // 启动游戏循环
+  gameLoop();
+})();
+</script>
+
+{{ end }}

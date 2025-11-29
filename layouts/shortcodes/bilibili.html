@@ -1,0 +1,14 @@
+{{- /* bilibili shortcode: usage {{< bilibili BV1xxxxxxx >}} or {{< bilibili av123456 >}} or numeric aid */ -}}
+{{- $raw := .Get 0 -}}
+{{- $aid := "" -}}
+{{- $bvid := "" -}}
+{{- if hasPrefix $raw "BV" -}}
+  {{- $bvid = $raw -}}
+{{- else if hasPrefix $raw "av" -}}
+  {{- $aid = (replace $raw "av" "") -}}
+{{- else -}}
+  {{- $aid = $raw -}}
+{{- end -}}
+<div class="video-embed bilibili">
+  <iframe src="//player.bilibili.com/player.html?{{ if $bvid }}bvid={{ $bvid }}{{ else }}aid={{ $aid }}{{ end }}&autoplay=0" allowfullscreen="true" scrolling="no" frameborder="0" loading="lazy"></iframe>
+</div>

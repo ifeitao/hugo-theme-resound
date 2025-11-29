@@ -1,0 +1,34 @@
+{{ define "main" }}
+<div class="page">
+  <h1 class="page-title">{{ .Title }}</h1>
+    {{ if or .Params.categories .Params.tags }}
+    <div class="post-addition" style="margin-bottom: 1rem;">
+    {{ with .Params.categories }}
+    {{ range . }}
+    <a href="{{ "categories/" | relURL }}#{{ . | urlize }}" class="post-tag">@{{ . }}</a>
+    {{ end }}
+    {{ end }}
+
+    {{ with .Params.tags }}
+    {{ range . }}
+    <a href="{{ "tags/" | relURL }}#{{ . | urlize }}" class="post-tag">#{{ . }}</a>
+    {{ end }}
+    {{ end }}
+    </div>
+    {{ end }}
+
+  <article>
+  {{ .Content }}
+  </article>
+  <div class="social-share"></div>
+  {{ if .Site.Params.comments_provider }}
+  <hr>
+  {{ partial "comments.html" . }}
+  {{ end }}
+  
+</div>
+
+{{ if .Params.toc }}
+{{ partial "toc.html" . }}
+{{ end }}
+{{ end }}

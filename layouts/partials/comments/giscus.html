@@ -1,0 +1,87 @@
+{{ $giscusLight := .Site.Params.giscus.theme_light | default "light" }}
+{{ $giscusDark := .Site.Params.giscus.theme_dark | default "dark_dimmed" }}
+
+<script>
+// Determine initial theme before loading giscus
+(function() {
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const html = document.documentElement;
+  const manualTheme = html.getAttribute('data-theme');
+  let isDark = false;
+  
+  if (manualTheme === 'dark') {
+    isDark = true;
+  } else if (manualTheme === 'light') {
+    isDark = false;
+  } else {
+    isDark = prefersDark;
+  }
+  
+  const initialTheme = isDark ? "{{ $giscusDark }}" : "{{ $giscusLight }}";
+  
+  // Store for later use
+  window.giscusTheme = {
+    light: "{{ $giscusLight }}",
+    dark: "{{ $giscusDark }}",
+    current: initialTheme
+  };
+  
+  // Inject giscus script with correct initial theme
+  const script = document.createElement('script');
+  script.src = 'https://giscus.app/client.js';
+  script.setAttribute('data-repo', "{{ .Site.Params.giscus.repo }}");
+  script.setAttribute('data-repo-id', "{{ .Site.Params.giscus.repo_id }}");
+  script.setAttribute('data-category', "{{ .Site.Params.giscus.category }}");
+  script.setAttribute('data-category-id', "{{ .Site.Params.giscus.category_id }}");
+  script.setAttribute('data-mapping', "{{ .Site.Params.giscus.mapping }}");
+  script.setAttribute('data-strict', '0');
+  script.setAttribute('data-reactions-enabled', '1');
+  script.setAttribute('data-emit-metadata', '0');
+  script.setAttribute('data-input-position', 'bottom');
+  script.setAttribute('data-theme', initialTheme);
+  script.setAttribute('data-lang', "{{ .Site.Params.giscus.lang }}");
+  script.setAttribute('crossorigin', 'anonymous');
+  script.async = true;
+  document.currentScript.parentNode.insertBefore(script, document.currentScript.nextSibling);
+})();
+</script>
+
+<script>
+// Sync giscus theme with site light/dark mode changes
+(function () {
+  const origin = 'https://giscus.app';
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+
+  function isSiteDark() {
+    const html = document.documentElement;
+    const manual = html.getAttribute('data-theme');
+    if (manual === 'dark') return true;
+    if (manual === 'light') return false;
+    return prefersDark && prefersDark.matches;
+  }
+
+  function getGiscusIframe() {
+    return document.querySelector('iframe.giscus-frame');
+  }
+
+  function setGiscusTheme() {
+    const iframe = getGiscusIframe();
+    if (!iframe || !window.giscusTheme) {
+      setTimeout(setGiscusTheme, 200);
+      return;
+    }
+    const theme = isSiteDark() ? window.giscusTheme.dark : window.giscusTheme.light;
+    if (theme !== window.giscusTheme.current) {
+      iframe.contentWindow.postMessage({ giscus: { setConfig: { theme } } }, origin);
+      window.giscusTheme.current = theme;
+    }
+  }
+
+  // Listen for theme changes
+  if (prefersDark && prefersDark.addEventListener) {
+    prefersDark.addEventListener('change', setGiscusTheme);
+  }
+  const mo = new MutationObserver(setGiscusTheme);
+  mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme']});
+})();
+</script>

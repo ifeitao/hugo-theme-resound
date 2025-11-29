@@ -1,0 +1,30 @@
+// Variables
+@import "theme-colors";
+
+$text-color: #515151;
+$light-text-color: #9a9a9a;
+$background-color: #fff;
+$border-color: #eee;
+$code-background: #f9f9f9;
+$code-inline-background: #f8f8f8;
+$code-inline-color: #bf616a;
+$selection-background: #fff159;
+$font-family-base: "LXGW WenKai", "Noto Serif CJK SC", "Source Han Serif SC", Georgia, "Times New Roman", serif;
+$font-family-heading: "LXGW WenKai", "Noto Sans CJK SC", "Source Han Sans SC", Helvetica, Arial, sans-serif;
+$font-family-code: "Noto Sans Mono CJK SC", Menlo, Monaco, "Courier New", monospace;
+
+// Breakpoints
+$breakpoint-small: 570px;
+$breakpoint-medium: 840px;
+$breakpoint-large: 1024px;
+$breakpoint-xl: 1100px;
+
+// Spacing
+$spacing-xs: 8px;
+$spacing-sm: 12px;
+$spacing-md: 15px;
+$spacing-lg: 20px;
+$spacing-xl: 24px;
+$spacing-xxl: 30px;
+$spacing-xxxl: 45px;
+$spacing-xxxxl: 60px;

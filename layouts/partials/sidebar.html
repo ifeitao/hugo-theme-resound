@@ -1,0 +1,65 @@
+<!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+
+  <nav class="sidebar-nav">
+    {{ $currentPage := . }}
+    
+    <a class="sidebar-nav-item {{ if eq $currentPage.RelPermalink "/" }}active{{ end }}" href="{{ .Site.BaseURL }}">
+        {{ .Site.Params.nav.name }}
+    </a>
+
+    {{ range .Site.Params.nav.items }}
+      <a class="sidebar-nav-item {{ if eq $currentPage.RelPermalink .url }}active{{ end }}" href="{{ .url | relURL }}">
+          {{ .name }}
+      </a>
+    {{ end }}
+
+    <!-- Dark mode toggle -->
+    <a class="sidebar-nav-item" href="#" id="theme-toggle">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 5px;">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+      {{ i18n "toggleTheme" | default "切换暗黑模式" }}
+    </a>
+
+    <a class="sidebar-nav-item" href="#" onclick="document.getElementById('sidebar-checkbox').checked=false">{{ i18n "backToTop" }}</a>
+
+    {{ with .Site.Params.friends }}
+    <input type="checkbox" id="toggle-friends" style="display:none" checked>
+    <label for="toggle-friends"><a class="sidebar-nav-item">{{ i18n "friends" }}</a></label>
+    <div class="sidebar-friends">
+    {{ range $name, $url := . }}
+    <a class="sidebar-nav-item sidebar-nav-item-sub" href="{{ $url }}">{{ $name }}</a>
+    {{ end }}
+    </div>
+    {{ end }}
+    
+    <!-- RSS Feed -->
+    <a class="sidebar-nav-item" href="{{ .Site.BaseURL }}index.xml" target="_blank">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 5px;">
+        <path d="M4 11a9 9 0 0 1 9 9"></path>
+        <path d="M4 4a16 16 0 0 1 16 16"></path>
+        <circle cx="5" cy="19" r="1"></circle>
+      </svg>
+      {{ i18n "rss" }}
+    </a>
+    
+    <!-- Language switcher -->
+    {{ if gt (len .Site.Languages) 1 }}
+    <div class="language-switcher">
+      {{ range .Site.Languages }}
+        {{ if ne $.Site.Language.LanguageCode .LanguageCode }}
+          <a class="sidebar-nav-item" href="{{ .LanguageCode | relURL }}">{{ .LanguageName }}</a>
+        {{ end }}
+      {{ end }}
+    </div>
+    {{ end }}
+  </nav>
+
+<p class="sidebar-item"> © 2006-{{ now.Format "2006" }} {{ .Site.Params.author }}. {{ .Site.Params.addition | safeHTML }}</p>
+
+</div>

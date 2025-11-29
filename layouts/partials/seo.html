@@ -1,0 +1,84 @@
+{{- /* SEO meta tags and structured data */ -}}
+{{- $isHome := .IsHome -}}
+{{- $title := cond (eq .Title "Home") (printf "%s - %s" .Site.Title (.Site.Params.slogan | default "")) (printf "%s - %s" .Title .Site.Title) -}}
+
+{{- /* Description: prefer params.description -> .Description -> summary */ -}}
+{{- $desc := or .Params.description .Description -}}
+{{- if not $desc -}}
+  {{- with .Summary -}}
+    {{- $desc = . | plainify | htmlUnescape -}}
+  {{- end -}}
+{{- end -}}
+{{- if $desc -}}
+  {{- $desc1 := $desc | plainify | htmlUnescape | replaceRE "\\s+" " " | trim " " | truncate 160 -}}
+  <meta name="description" content="{{ $desc1 }}">
+  {{- /* reuse processed description */ -}}
+  {{- $desc = $desc1 -}}
+{{- end -}}
+
+{{- /* Canonical */ -}}
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{- /* hreflang alternates including self + x-default */ -}}
+{{- $alts := slice . -}}
+{{- with .AllTranslations -}}
+  {{- $alts = $alts | append . -}}
+{{- end -}}
+{{- range $alts -}}
+<link rel="alternate" hreflang="{{ .Site.Language.Lang }}" href="{{ .Permalink }}">
+{{- end -}}
+<link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+
+{{- /* Open Graph & Twitter */ -}}
+{{- $type := cond (or .IsHome .IsSection) "website" "article" -}}
+{{- $image := .Params.featuredImage | default .Params.image | default .Site.Params.og_image | default "/logo.png" -}}
+{{- $image = $image | absURL -}}
+<meta property="og:title" content="{{ $title }}">
+{{- if $desc }}<meta property="og:description" content="{{ $desc }}">{{ end -}}
+<meta property="og:type" content="{{ $type }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:image" content="{{ $image }}">
+<meta property="og:site_name" content="{{ .Site.Title }}">
+<meta property="og:locale" content="{{ .Site.Language.LanguageCode }}">
+
+<meta name="twitter:card" content="summary_large_image">
+{{- with .Site.Params.twitter_site }}<meta name="twitter:site" content="{{ . }}">{{ end -}}
+<meta name="twitter:title" content="{{ $title }}">
+{{- if $desc }}<meta name="twitter:description" content="{{ $desc }}">{{ end -}}
+<meta name="twitter:image" content="{{ $image }}">
+
+{{- /* Robots: allow override by front matter */ -}}
+{{- if .Params.noindex }}
+<meta name="robots" content="noindex, nofollow">
+{{- end -}}
+
+{{- /* JSON-LD */ -}}
+{{- $orgLogo := "/logo.png" | absURL -}}
+{{- if $isHome -}}
+  {{- $website := dict
+      "@context" "https://schema.org"
+      "@type" "WebSite"
+      "name" .Site.Title
+      "url" .Site.BaseURL
+      "potentialAction" (dict
+        "@type" "SearchAction"
+        "target" (printf "%ssearch/?q={search_term_string}" .Site.BaseURL)
+        "query-input" "required name=search_term_string"
+      )
+    -}}
+  <script type="application/ld+json">{{ $website | jsonify | safeJS }}</script>
+{{- else -}}
+  {{- $article := dict
+      "@context" "https://schema.org"
+      "@type" "Article"
+      "headline" .Title
+      "description" ($desc | default "")
+      "datePublished" (.PublishDate | default .Date | time.Format "2006-01-02T15:04:05Z07:00")
+      "dateModified" (.Lastmod | time.Format "2006-01-02T15:04:05Z07:00")
+      "author" (dict "@type" "Person" "name" (.Site.Params.author | default .Site.Title))
+      "publisher" (dict "@type" "Organization" "name" .Site.Title "logo" (dict "@type" "ImageObject" "url" $orgLogo))
+      "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+      "image" (slice $image)
+    -}}
+  <script type="application/ld+json">{{ $article | jsonify | safeJS }}</script>
+{{- end -}}

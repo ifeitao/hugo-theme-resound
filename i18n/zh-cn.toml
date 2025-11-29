@@ -1,0 +1,60 @@
+# Chinese (Simplified) translations
+[home]
+other = "首页"
+
+[archive]
+other = "归档"
+
+[featured]
+other = "精选"
+
+[categories]
+other = "分类"
+
+[tags]
+other = "标签"
+
+[search]
+other = "搜索"
+
+[about]
+other = "关于"
+
+[backToTop]
+other = "回到顶部"
+
+[friends]
+other = "友情链接"
+
+[postedOn]
+other = "发布于"
+
+[expireWarning]
+other = "文章已过期：本文最后更新于 %s，距今已超过 %d 年，文中内容可能已过时，请谨慎参考。"
+
+[relatedPosts]
+other = "您可能也喜欢"
+
+[readingTime]
+other = "{{ .Count }}分钟阅读"
+
+[tableOfContents]
+other = "目录"
+
+[next]
+other = "下一页"
+
+[previous]
+other = "上一页"
+
+[projects]
+other = "项目"
+
+[latestPosts]
+other = "最新文章"
+
+[moreArticles]
+other = "更多文章"
+
+[rss]
+other = "RSS 订阅"

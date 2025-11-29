@@ -1,0 +1,38 @@
+{{ define "main" }}
+<div class="post">
+  <h1 class="post-title">{{ .Title }}</h1>
+    <div class="post-addition" style="margin-bottom: 1rem;">
+    <span class="post-date">{{ .Date.Format (i18n "postedOn") }} {{ .Date.Format "January 2, 2006" }}</span>
+
+    {{ with .Params.categories }}
+    {{ range . }}
+    <a href="{{ "categories/" | relURL }}#{{ . | urlize }}" class="post-tag">@{{ . }}</a>
+    {{ end }}
+    {{ end }}
+
+    {{ with .Params.tags }}
+    {{ range . }}
+    <a href="{{ "tags/" | relURL }}#{{ . | urlize }}" class="post-tag">#{{ . }}</a>
+    {{ end }}
+    {{ end }}
+    </div>
+
+  <article>
+  {{ partial "article-expiration.html" . }}
+  {{ .Content }}
+  </article>
+  <div class="social-share"></div>
+  
+  {{ partial "related-posts.html" . }}
+  
+  {{ if .Site.Params.comments_provider }}
+  <hr>
+  {{ partial "comments.html" . }}
+  {{ end }}
+   
+</div>
+
+{{ if .Params.toc }}
+{{ partial "toc.html" . }}
+{{ end }}
+{{ end }}

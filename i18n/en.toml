@@ -1,0 +1,60 @@
+# English translations
+[home]
+other = "Home"
+
+[archive]
+other = "Archive"
+
+[featured]
+other = "Featured"
+
+[categories]
+other = "Categories"
+
+[tags]
+other = "Tags"
+
+[search]
+other = "Search"
+
+[about]
+other = "About"
+
+[backToTop]
+other = "Back to Top"
+
+[friends]
+other = "Friends"
+
+[postedOn]
+other = "Posted on"
+
+[expireWarning]
+other = "Article expired: This article was last updated on %s, over %d years ago. The content may be outdated, please verify. "
+
+[relatedPosts]
+other = "You might also enjoy"
+
+[readingTime]
+other = "{{ .Count }} min read"
+
+[tableOfContents]
+other = "Table of Contents"
+
+[next]
+other = "Next"
+
+[previous]
+other = "Previous"
+
+[projects]
+other = "Projects"
+
+[latestPosts]
+other = "Latest Posts"
+
+[moreArticles]
+other = "More Articles"
+
+[rss]
+other = "RSS Feed"

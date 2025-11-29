@@ -1,0 +1,13 @@
+<!-- Debug: comments_provider = {{ .Site.Params.comments_provider }} -->
+{{ if .Site.Params.comments_provider }}
+  <!-- Debug: comments_provider is set -->
+  {{ if eq .Site.Params.comments_provider "giscus" }}
+{{ partial "comments/giscus.html" . }}
+{{ else if eq .Site.Params.comments_provider "disqus" }}
+{{ partial "comments/disqus.html" . }}
+{{ else if eq .Site.Params.comments_provider "utterances" }}
+{{ partial "comments/utterances.html" . }}
+{{ end }}
+{{ else }}
+  <!-- Comments provider not configured -->
+{{ end }}

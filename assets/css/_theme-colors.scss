@@ -1,0 +1,19 @@
+// Theme colors - Dynamically generated from Hugo config
+// These variables will be overridden by Hugo's SCSS processor
+$primary-color: #d85916 !default;
+$secondary-color: #530000 !default;
+$link-color: $primary-color !default;
+
+// Additional theme colors derived from primary color
+$primary-color-light: lighten($primary-color, 10%) !default;
+$primary-color-dark: darken($primary-color, 10%) !default;
+$secondary-color-light: lighten($secondary-color, 10%) !default;
+$secondary-color-dark: darken($secondary-color, 10%) !default;
+
+// Dark theme counterparts (must be provided via Hugo params or theme defaults)
+$dark-primary-color: $primary-color !default;
+$dark-secondary-color: $secondary-color !default;
+$dark-link-color: $link-color !default;
+
+// If secondary color is not provided, derive it from primary color
+$secondary-color: if($secondary-color == #941d15, darken($primary-color, 10%), $secondary-color) !default;

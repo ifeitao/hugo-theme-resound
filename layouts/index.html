@@ -1,0 +1,21 @@
+{{ define "main" }}
+<div class="posts">
+  <h1>{{ i18n "latestPosts" }}</h1>
+  <ul>
+  {{ range first (.Site.Params.recent_post | default 10) (where .Site.RegularPages "Type" "posts") }}
+    <li>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        <span class="post-date">{{ .Date.Format "2006.01.02" }}</span>
+    </li>
+  {{ end }}
+  </ul>
+  <h1>{{ i18n "moreArticles" }}</h1>
+    <ul id="show">
+        <li><a href="{{ "featured/" | relURL }}">{{ i18n "featured" }}</a></li>
+        <li><a href="{{ "archive/" | relURL }}">{{ i18n "archive" }}</a></li>
+        <li><a href="{{ "categories/" | relURL }}">{{ i18n "categories" }}</a></li>
+        <li><a href="{{ "tags/" | relURL }}">{{ i18n "tags" }}</a></li>
+        <li><a href="{{ "search/" | relURL }}">{{ i18n "search" }}</a></li>
+    </ul>
+</div>
+{{ end }}

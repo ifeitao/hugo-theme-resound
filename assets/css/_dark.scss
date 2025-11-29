@@ -1,0 +1,209 @@
+// Dark mode support: system preference and manual override via [data-theme]
+
+// Helper mixin to apply dark colors
+@mixin dark-palette() {
+  body { color: #d0d0d0; background-color: #121212; }
+  a { color: $dark-link-color; }
+  h1, h2, h3, h4, h5, h6 { color: $dark-primary-color; }
+
+  hr { border-top-color: #2a2a2a; border-bottom-color: #000; }
+  .masthead { border-bottom-color: #2a2a2a; color: $dark-primary-color; }
+  .container a { color: $dark-link-color; }
+  .post-date, .tags-expo-section .post-date { color: #9a9a9a; }
+
+  // Page & post titles
+  .page-title,
+  .post-title,
+  .post-title a { color: $dark-secondary-color; }
+
+  // Emphasis: bold text should be brighter in dark mode
+  b, strong { color: $dark-primary-color; }
+
+  // Search highlight in results preview
+  #results-preview em { color: $dark-secondary-color; }
+
+  // Code blocks
+  pre:not(.chroma) { background-color: #1e1e1e; }
+  code { background-color: #1a1a1a; color: #ffb4b4; }
+
+  // Tables
+  table { border-color: #333; }
+  td, th { border-color: #333; }
+  tbody tr:nth-child(odd) td,
+  tbody tr:nth-child(odd) th { background-color: #1a1a1a; }
+
+  // Blockquote
+  blockquote { background-color: #1a1a1a; color: #bdbdbd; border-left-color: #555; }
+
+  // TOC
+  #markdown-toc { background-color: #161616; border-color: #333; }
+  .has-toc .nav li > a { color: #aaa; border-left-color: #111; }
+  .has-toc .nav li > a:hover { color: $dark-secondary-color; border-left-color: $dark-secondary-color; }
+  .has-toc .nav > .active > a { color: $dark-secondary-color; border-left-color: $dark-secondary-color; }
+
+  // Related posts
+  .related-posts { border-top-color: #2a2a2a; border-bottom-color: #2a2a2a; }
+  .related-posts h3 { color: $dark-primary-color; }
+  .related-post-item { border-bottom-color: #2a2a2a; }
+  .related-post-item a { color: #d0d0d0; }
+  .related-post-item a:hover { color: $dark-link-color; }
+  .related-post-date { color: #9a9a9a; }
+
+  // Tags and buttons
+  .post-tag { background: rgba(255,255,255,0.08); color: $dark-primary-color; }
+  .post-tag:hover, .post-tag.select { background: $dark-primary-color; color: #fff; }
+  a.btn-common { color: $dark-link-color; border-color: $dark-link-color; }
+  a.btn-common:hover { background-color: $dark-primary-color; color: #fff; }
+
+  // Overlay
+  #overlay { background: rgba(0,0,0,0.9); }
+
+  // Sidebar and toggle
+  .sidebar { background-color: #1f1f1f; color: rgba(255,255,255,0.85); box-shadow: rgba(0, 0, 0, 0.6) 0 6px 24px; }
+  .sidebar-nav { border-bottom-color: rgba(255,255,255,0.08); }
+  .sidebar-nav-item { border-top-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85); }
+  a.sidebar-nav-item { color: rgba(255,255,255,0.85); }
+  a.sidebar-nav-item:hover,
+  a.sidebar-nav-item:focus,
+  .sidebar-nav-item.active { background-color: rgba(255,255,255,0.12); color: #fff; }
+  .language-switcher { border-top-color: rgba(255,255,255,0.15); }
+  .language-switcher .sidebar-nav-item { background-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); }
+  .language-switcher .sidebar-nav-item:hover { background-color: rgba(255,255,255,0.25); }
+  .sidebar-toggle { color: rgba(255,255,255,0.85); }
+
+  // Admonitions
+  .warning { background-color: #2a1e1e; }
+  .note { background-color: #2a211b; }
+  .info { background-color: #1e1e2a; }
+  .tip { background-color: #1a2623; }
+
+  // Footnote popup
+  div#footnote-popup { background-color: #1c1c1c; box-shadow: 0 2px 15px 0 rgba(0, 0, 0, .6); }
+
+  // Syntax highlight (Monokai-style)
+  .highlight { color: #f8f8f2; background-color: #2d2d2d; }
+  .highlight .c,
+  .highlight .cd,
+  .highlight .cm,
+  .highlight .c1,
+  .highlight .cs {
+    color: #75715e;
+    font-style: italic;
+  }
+  .highlight .cp {
+    color: #75715e;
+    font-weight: bold;
+  }
+  .highlight .err {
+    color: #960050;
+    background-color: #1e0010;
+  }
+  .highlight .gi {
+    color: #ffffff;
+    background-color: #324932;
+  }
+  .highlight .gd {
+    color: #ffffff;
+    background-color: #493131;
+  }
+  .highlight .ge {
+    color: #f8f8f2;
+    font-style: italic;
+  }
+  .highlight .gr,
+  .highlight .gt {
+    color: #ff5c57;
+  }
+  .highlight .gh {
+    color: #999999;
+  }
+  .highlight .go {
+    color: #888888;
+  }
+  .highlight .gp {
+    color: #555555;
+  }
+  .highlight .gs {
+    font-weight: bold;
+  }
+  .highlight .gu {
+    color: #aaaaaa;
+  }
+  .highlight .k,
+  .highlight .kv,
+  .highlight .kc,
+  .highlight .kd,
+  .highlight .kp,
+  .highlight .kr,
+  .highlight .kt {
+    color: #66d9ef;
+    font-weight: bold;
+  }
+  .highlight .kn,
+  .highlight .ow,
+  .highlight .o {
+    color: #f92672;
+    font-weight: bold;
+  }
+  .highlight .m,
+  .highlight .mb,
+  .highlight .mx,
+  .highlight .mf,
+  .highlight .mh,
+  .highlight .mi,
+  .highlight .il,
+  .highlight .mo {
+    color: #ae81ff;
+  }
+  .highlight .se,
+  .highlight .sb,
+  .highlight .sc,
+  .highlight .sd,
+  .highlight .s2,
+  .highlight .sh,
+  .highlight .si,
+  .highlight .sx,
+  .highlight .sr,
+  .highlight .s1,
+  .highlight .ss,
+  .highlight .s {
+    color: #e6db74;
+  }
+  .highlight .na,
+  .highlight .nc,
+  .highlight .nd,
+  .highlight .ne,
+  .highlight .nf {
+    color: #a6e22e;
+    font-weight: bold;
+  }
+  .highlight .no {
+    color: #66d9ef;
+  }
+  .highlight .bp,
+  .highlight .nb,
+  .highlight .ni,
+  .highlight .nn,
+  .highlight .vc,
+  .highlight .vg,
+  .highlight .vi,
+  .highlight .nv,
+  .highlight .w {
+    color: #f8f8f2;
+  }
+  .highlight .nl {
+    color: #f8f8f2;
+    font-weight: bold;
+  }
+  .highlight .nt {
+    color: #f92672;
+  }
+}
+
+// System preference
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) { @include dark-palette(); }
+}
+
+// Manual override
+html[data-theme="dark"] { @include dark-palette(); }

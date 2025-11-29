@@ -1,0 +1,99 @@
+baseURL = 'https://ifeitao.github.io/hugo-theme-resound/'
+languageCode = 'zh-CN'
+defaultContentLanguage = 'zh-cn'
+title = 'Resound 主题示例站点'
+# Theme configuration for demo site deployment
+# Use 'resound' when theme is in parent themes/ directory
+theme = 'resound'
+
+# Multi-language configuration
+[languages]
+  [languages.zh-cn]
+    languageName = "中文"
+    weight = 1
+  [languages.en]
+    languageName = "English"
+    weight = 2
+
+# Site params
+[params]
+  slogan = 'Make Your Content Resound - 让你的内容产生回响'
+  author = 'Resound Theme'
+  logo = '/images/logo.png'
+  addition = '</br>一个优雅的Hugo博客主题'
+  
+  # Navigation
+  [params.nav]
+    name = '首页'
+    url = '/'
+    [[params.nav.items]]
+      name = '归档'
+      url = '/archive/'
+    [[params.nav.items]]
+      name = '分类'
+      url = '/categories/'
+    [[params.nav.items]]
+      name = '标签'
+      url = '/tags/'
+    [[params.nav.items]]
+      name = '搜索'
+      url = '/search/'
+    [[params.nav.items]]
+      name = '关于'
+      url = '/about/'
+
+[languages.zh-cn.params.nav]
+  name = '首页'
+  [[languages.zh-cn.params.nav.items]]
+    name = '归档'
+    url = '/archive/'
+  [[languages.zh-cn.params.nav.items]]
+    name = '分类'
+    url = '/categories/'
+  [[languages.zh-cn.params.nav.items]]
+    name = '标签'
+    url = '/tags/'
+  [[languages.zh-cn.params.nav.items]]
+    name = '搜索'
+    url = '/search/'
+  [[languages.zh-cn.params.nav.items]]
+    name = '关于'
+    url = '/about/'
+
+[languages.en.params.nav]
+  name = 'Home'
+  [[languages.en.params.nav.items]]
+    name = 'Archive'
+    url = '/en/archive/'
+  [[languages.en.params.nav.items]]
+    name = 'Categories'
+    url = '/en/categories/'
+  [[languages.en.params.nav.items]]
+    name = 'Tags'
+    url = '/en/tags/'
+  [[languages.en.params.nav.items]]
+    name = 'Search'
+    url = '/en/search/'
+  [[languages.en.params.nav.items]]
+    name = 'About'
+    url = '/en/about/'
+
+  # Friends (optional)
+  [params.friends]
+    "Hugo" = "https://gohugo.io"
+    "GitHub" = "https://github.com"
+
+# RSS configuration
+[services]
+  [services.rss]
+    limit = 20  # Number of items in RSS feed
+
+# Permalinks
+[permalinks]
+  posts = '/:year/:month/:day/:title/'
+
+[languages.zh-cn.permalinks]
+  posts = '/:year/:month/:day/:title/'
+
+[languages.en.permalinks]
+  posts = '/en/:year/:month/:day/:title/'

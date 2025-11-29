@@ -1,0 +1,122 @@
+// Layout components
+
+// Wrapper
+.wrap {
+  position: relative;
+  width: 100%;
+}
+
+// Container
+.container {
+  max-width: 420px;
+  padding-left: $spacing-md;
+  padding-right: $spacing-md;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: $breakpoint-small) {
+  .container {
+    max-width: 500px;
+  }
+}
+
+@media (min-width: $breakpoint-medium) {
+  .container {
+    max-width: 600px;
+  }
+}
+
+@media (min-width: $breakpoint-large) {
+  .container {
+    max-width: 800px;
+  }
+}
+
+.container a {
+  color: $primary-color;
+}
+
+// Posts and pages
+.page, .post {
+  margin-bottom: $spacing-xxxxl;
+}
+
+.page-title,
+.post-title,
+.post-title a {
+  color: $secondary-color;
+  margin-top: 0;
+}
+
+.page-title:hover,
+.post-title:hover,
+.post-title a:hover {
+  text-decoration: none;
+}
+
+.page-title {
+  padding-bottom: 5px;
+}
+
+.post-date {
+  color: $light-text-color;
+  font-size: 14px;
+  float: right;
+  position: relative;
+}
+
+.post-addition {
+  display: block;
+}
+
+// Masthead
+.masthead {
+  padding-top: $spacing-md;
+  padding-bottom: $spacing-md;
+  margin-bottom: $spacing-xxxl;
+  border-bottom: 1px solid $border-color;
+  text-align: center;
+  color: $primary-color;
+}
+
+@media (min-width: 450px) {
+  .masthead {
+    width: 100%;
+  }
+}
+
+.masthead .masthead-logo {
+  height: 64px;
+  width: 64px;
+  vertical-align: text-bottom;
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border-radius: 32px;
+  border-color: #ffffff;
+}
+
+.masthead .masthead-logo:hover {
+  box-shadow: 0 0 0 2px;
+}
+
+// Responsive video embeds
+.video-embed {
+  position: relative;
+  padding-bottom: 56.25%; // 16:9
+  height: 0;
+  overflow: hidden;
+  background: #000;
+  margin: $spacing-lg 0;
+  border-radius: 8px;
+}
+
+.video-embed iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}

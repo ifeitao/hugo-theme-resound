@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.LanguageCode }}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff9950">
+    <title>
+        {{- if eq .Title "Home" -}}
+            {{ .Site.Title }} - {{ .Site.Params.slogan }}
+        {{- else -}}
+            {{ .Title }} - {{ .Site.Title }}
+        {{- end -}}
+    </title>
+    <!-- CSS -->
+    {{ $themeColor := .Site.Params.theme_color | default "#b82d23" }}
+    {{ $secondaryColor := .Site.Params.secondary_color | default "#941d15" }}
+    {{ $linkColor := .Site.Params.link_color | default $themeColor }}
+    {{ $darkPrimary := .Site.Params.theme_color_dark | default $themeColor }}
+    {{ $darkSecondary := .Site.Params.secondary_color_dark | default $secondaryColor }}
+    {{ $darkLink := .Site.Params.link_color_dark | default $darkPrimary }}
+    {{ $generatedScss := printf "$primary-color: %s;\n$secondary-color: %s;\n$link-color: %s;\n$dark-primary-color: %s;\n$dark-secondary-color: %s;\n$dark-link-color: %s;\n" $themeColor $secondaryColor $linkColor $darkPrimary $darkSecondary $darkLink }}
+    {{/* Prepend dynamically generated palette so SCSS uses configured colors */}}
+    {{ $dynamicVars := resources.FromString "css/_generated-params.scss" $generatedScss }}
+    {{ $mainScss := resources.Get "css/main.scss" }}
+    {{ $scssInput := slice $dynamicVars $mainScss | resources.Concat "css/main.generated.scss" }}
+    {{ $scssOptions := dict "targetPath" "css/main.css" "enableSourceMap" false }}
+    {{ $styles := $scssInput | css.Sass $scssOptions | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $styles.Permalink }}" integrity="{{ $styles.Data.Integrity }}"> 
+    {{ $syntax := resources.Get "css/_syntax.scss" | css.Sass | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $syntax.Permalink }}" integrity="{{ $syntax.Data.Integrity }}"> 
+    {{ if .Site.Params.enable_lxgw_wenkai }}
+    <link rel="stylesheet" href="{{ .Site.Params.lxgw_wenkai_cdn }}">
+    {{ end }}
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="{{ .Site.Params.theme_color | default "#b82d23" }}">
+    {{ partial "seo.html" . }}
+    <!-- RSS Feed -->
+    {{ with .OutputFormats.Get "rss" -}}
+    {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+    {{ end -}}
+</head>
+{{ partial "analytics.html" . }}
+<body>
+
+    {{ partial "sidebar.html" . }}
+
+    <div class="wrap {{ if .Params.toc }}has-toc{{ end }}">
+
+        <div class="masthead">
+            <a href="{{ .Site.BaseURL }}" title="{{ .Site.Title }}-{{ .Site.Params.slogan }}">
+                <img class="masthead-logo" src="{{ .Site.Params.logo | relURL }}" alt="{{ .Site.Title }}" loading="lazy"/>
+            </a>
+            <p>{{ .Site.Title }}</p>
+        </div>
+
+        <div class="container">
+            {{ if .Params.mathjax }}
+            <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+            <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+            <script>
+                MathJax = {
+                    tex: {
+                        inlineMath: [['$', '$'], ['\\(', '\\)']],
+                        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                        processEscapes: true,
+                        packages: {'[+]': ['ams']},
+                        tags: 'ams'
+                    },
+                    options: {
+                        ignoreHtmlClass: 'tex2jax_ignore',
+                        processHtmlClass: 'tex2jax_process'
+                    },
+                    loader: {
+                        load: ['[tex]/ams']
+                    }
+                };
+            </script>
+            {{ end }}
+
+                        {{/* Load Mermaid on demand: detect fenced code block "```mermaid" or front matter mermaid flag */}}
+                        {{ $hasMermaid := or (.Store.Get "hasMermaid") (in .RawContent "```mermaid") .Params.mermaid }}
+                        {{ if $hasMermaid }}
+                        <script type="module">
+                            import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+                            const siteCfg = {
+                                startOnLoad: {{ if or (eq .Site.Params.mermaid.startOnLoad false) (eq .Site.Params.mermaid.startOnLoad true) }}{{ .Site.Params.mermaid.startOnLoad }}{{ else }}true{{ end }},
+                                securityLevel: {{ default "loose" .Site.Params.mermaid.securityLevel | jsonify | safeJS }},
+                                theme: {{ default "default" .Site.Params.mermaid.theme | jsonify | safeJS }},
+                                flowchart: { htmlLabels: true }
+                            };
+                            if ({{ if .Site.Params.mermaid.autoDark }}true{{ else }}false{{ end }} && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches && siteCfg.theme !== 'dark') {
+                                siteCfg.theme = 'dark';
+                            }
+                            mermaid.initialize(siteCfg);
+                        </script>
+                        {{ end }}
+
+            {{ block "main" . }}{{ end }}
+        </div>
+    </div>
+
+    {{ partial "footnote.html" . }}
+
+    <label for="sidebar-checkbox" class="sidebar-toggle" id="sidebar-toggle"><div id="overlay"></div></label>
+
+    {{ partial "scripts.html" . }}
+</body>
+</html>

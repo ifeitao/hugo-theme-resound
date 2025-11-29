@@ -1,0 +1,17 @@
+{{- $pctx := . -}}
+{{- if .IsHome -}}{{ $pctx = .Site }}{{- end -}}
+[
+{{- $len := (len $pctx.RegularPages) -}}
+{{- range $index, $page := $pctx.RegularPages -}}
+  {{- if not .Params.noSearch -}}
+  {
+    "title": {{ .Title | jsonify }},
+    "category": {{ if .Params.categories }}{{ delimit .Params.categories "," | jsonify }}{{ else }}""{{ end }},
+    "tag": {{ if .Params.tags }}{{ delimit .Params.tags "," | jsonify }}{{ else }}""{{ end }},
+    "content": {{ .Plain | jsonify }},
+    "url": {{ .RelPermalink | jsonify }},
+    "date": {{ .Date.Format "2006.01.02" | jsonify }}
+  }{{ if ne (add $index 1) $len }},{{ end }}
+  {{- end -}}
+{{- end -}}
+]

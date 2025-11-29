@@ -29,6 +29,9 @@ other = "Friends"
 [postedOn]
 other = "Posted on"
 
+[updatedOn]
+other = "Updated on"
+
 [expireWarning]
 other = "Article expired: This article was last updated on %s, over %d years ago. The content may be outdated, please verify. "
 

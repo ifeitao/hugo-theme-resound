@@ -29,6 +29,9 @@ other = "友情链接"
 [postedOn]
 other = "发布于"
 
+[updatedOn]
+other = "更新于"
+
 [expireWarning]
 other = "文章已过期：本文最后更新于 %s，距今已超过 %d 年，文中内容可能已过时，请谨慎参考。"
 

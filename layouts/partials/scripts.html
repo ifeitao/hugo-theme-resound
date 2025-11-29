@@ -35,14 +35,21 @@
       btn.addEventListener('click', function(e){
         e.preventDefault();
         var current = root.getAttribute('data-theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         var next;
+        
+        // Toggle: dark -> light -> system -> dark -> ...
         if (current === 'dark') {
           next = 'light';
         } else if (current === 'light') {
+          // Return to system preference
           next = '';
         } else {
-          next = 'dark';
+          // No manual setting, currently following system
+          // Toggle to opposite of system preference
+          next = prefersDark ? 'light' : 'dark';
         }
+        
         if (next) {
           root.setAttribute('data-theme', next);
           localStorage.setItem(key, next);

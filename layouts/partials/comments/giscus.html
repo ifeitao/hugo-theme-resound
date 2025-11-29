@@ -4,20 +4,33 @@
 <script>
 // Determine initial theme before loading giscus
 (function() {
+  // Check localStorage first (same logic as theme toggle)
+  const key = 'resound-theme';
+  const saved = localStorage.getItem(key);
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   const html = document.documentElement;
-  const manualTheme = html.getAttribute('data-theme');
   let isDark = false;
   
-  if (manualTheme === 'dark') {
+  // Determine theme based on saved preference or system
+  if (saved === 'dark') {
     isDark = true;
-  } else if (manualTheme === 'light') {
+  } else if (saved === 'light') {
     isDark = false;
   } else {
-    isDark = prefersDark;
+    // No saved preference, check data-theme attribute or system
+    const manualTheme = html.getAttribute('data-theme');
+    if (manualTheme === 'dark') {
+      isDark = true;
+    } else if (manualTheme === 'light') {
+      isDark = false;
+    } else {
+      isDark = prefersDark;
+    }
   }
   
   const initialTheme = isDark ? "{{ $giscusDark }}" : "{{ $giscusLight }}";
+  
+  console.log('[Giscus Init] Saved theme:', saved, 'isDark:', isDark, 'initialTheme:', initialTheme);
   
   // Store for later use
   window.giscusTheme = {
@@ -49,14 +62,25 @@
 <script>
 // Sync giscus theme with site light/dark mode changes
 (function () {
-  const origin = 'https://giscus.app';
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
 
   function isSiteDark() {
+    const key = 'resound-theme';
+    const saved = localStorage.getItem(key);
     const html = document.documentElement;
     const manual = html.getAttribute('data-theme');
+    
+    console.log('[Giscus Debug] saved:', saved, 'data-theme:', manual, 'prefers-dark:', prefersDark?.matches);
+    
+    // Check saved preference first
+    if (saved === 'dark') return true;
+    if (saved === 'light') return false;
+    
+    // Then check manual attribute
     if (manual === 'dark') return true;
     if (manual === 'light') return false;
+    
+    // Finally fall back to system preference
     return prefersDark && prefersDark.matches;
   }
 
@@ -67,13 +91,24 @@
   function setGiscusTheme() {
     const iframe = getGiscusIframe();
     if (!iframe || !window.giscusTheme) {
+      console.log('[Giscus Debug] Waiting for iframe or theme config...');
       setTimeout(setGiscusTheme, 200);
       return;
     }
-    const theme = isSiteDark() ? window.giscusTheme.dark : window.giscusTheme.light;
+    
+    const isDark = isSiteDark();
+    const theme = isDark ? window.giscusTheme.dark : window.giscusTheme.light;
+    console.log('[Giscus Debug] Site is dark:', isDark, 'Setting theme to:', theme, 'Current:', window.giscusTheme.current);
+    
+    // Only send message if theme actually changed
     if (theme !== window.giscusTheme.current) {
-      iframe.contentWindow.postMessage({ giscus: { setConfig: { theme } } }, origin);
-      window.giscusTheme.current = theme;
+      try {
+        iframe.contentWindow.postMessage({ giscus: { setConfig: { theme } } }, 'https://giscus.app');
+        window.giscusTheme.current = theme;
+        console.log('[Giscus Debug] Theme updated successfully');
+      } catch (e) {
+        console.warn('[Giscus Debug] Failed to update theme:', e.message);
+      }
     }
   }
 
@@ -81,7 +116,11 @@
   if (prefersDark && prefersDark.addEventListener) {
     prefersDark.addEventListener('change', setGiscusTheme);
   }
-  const mo = new MutationObserver(setGiscusTheme);
+  const mo = new MutationObserver(function() {
+    console.log('[Giscus Debug] data-theme attribute changed');
+    setGiscusTheme();
+  });
   mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme']});
 })();
 </script>
+

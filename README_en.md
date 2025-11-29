@@ -1,4 +1,5 @@
-# Resound - Hugo Theme
+# Resound - Hugo Theme  
+[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-SITE-ID/deploy-status)](https://app.netlify.com/sites/hugo-theme-resound/deploys)
 
 > **Make Your Content Resound**
 
@@ -13,8 +14,8 @@ An elegant and feature-rich Hugo blog theme with support for slides, archives, s
 
 ## 📸 Live Demo
 
-- **Live Demo**: [https://ifeitao.github.io/hugo-theme-resound/](https://ifeitao.github.io/hugo-theme-resound/)
-- **Build Status**: [![Deploy Status](https://github.com/ifeitao/hugo-theme-resound/actions/workflows/demo.yml/badge.svg)](https://github.com/ifeitao/hugo-theme-resound/actions/workflows/demo.yml)
+- **Live Demo**: [https://hugo-theme-resound.netlify.app/](https://hugo-theme-resound.netlify.app/)
+- **Build Status**: [![Netlify Status](https://api.netlify.com/api/v1/badges/03f43471-68d3-4eb0-9eae-861dff7a3bcc/deploy-status)](https://app.netlify.com/projects/hugo-theme-resound/deploys)
 
 ## ✨ Features
 
@@ -414,27 +415,32 @@ MIT License
 
 Copyright (c) 2024 ifeitao
 
-## 🚀 Deployment
+## 🚀 Deployment (Netlify)
 
-### GitHub Pages (Auto Deploy)
+We recommend deploying the demo site (`exampleSite`) via Netlify. This repo includes `netlify.toml` for zero-config builds.
 
-1. Fork this repository or push the theme to your GitHub repository
-2. Go to repository Settings > Pages
-3. Select "GitHub Actions" as Source
-4. Every push to the main branch will automatically build and deploy the demo site
+### Quick Deploy
 
-### One-Click Deploy to Netlify
+1. Sign in to [Netlify](https://app.netlify.com)
+2. Click “Import an existing project” and select GitHub repo `ifeitao/hugo-theme-resound`
+3. Keep default build settings (uses `netlify.toml` in this repo)
+4. Visit the domain provided after the first deploy
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/ifeitao/hugo-theme-resound)
+### Build settings
 
-### Other Platforms
+- Production builds use `$URL` as `baseURL`
+- Preview builds use `$DEPLOY_PRIME_URL` as `baseURL`
+- Publish directory: `exampleSite/public`
 
-The theme also supports deployment to:
-- Vercel
-- Cloudflare Pages
-- Self-hosted servers
+### Status badge
 
-See each platform's Hugo deployment documentation for details.
+Add the Netlify status badge at the top of README (replace `YOUR-SITE-ID` and `YOUR-SITE-NAME`):
+
+```
+[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-SITE-ID/deploy-status)](https://app.netlify.com/sites/YOUR-SITE-NAME/deploys)
+```
+
+> You can find the Site ID in Netlify → Site settings → Status badges.
 
 ## ❤️ Contribution
 
@@ -476,7 +482,7 @@ Feel free to suggest more ideas in [Issues](https://github.com/ifeitao/hugo-them
 ## 🔗 Links
 
 - **Theme Repository**: https://github.com/ifeitao/hugo-theme-resound
-- **Example Site**: https://yifeitao.com/hugo-theme-resound/
+- **Example Site**: https://hugo-theme-resound.netlify.app/
 - **Hugo Official Documentation**: https://gohugo.io/documentation/
 
 ---

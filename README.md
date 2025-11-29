@@ -15,12 +15,32 @@
 
 ## 📸 在线演示
 
-- **Live Demo**: [https://ifeitao.github.io/hugo-theme-resound/](https://ifeitao.github.io/hugo-theme-resound/)
-- **部署状态**: [![Deploy Status](https://github.com/ifeitao/hugo-theme-resound/actions/workflows/demo.yml/badge.svg)](https://github.com/ifeitao/hugo-theme-resound/actions/workflows/demo.yml)
+## 部署（Netlify）
+- **部署状态**: [![Netlify Status](https://api.netlify.com/api/v1/badges/03f43471-68d3-4eb0-9eae-861dff7a3bcc/deploy-status)](https://app.netlify.com/projects/hugo-theme-resound/deploys)
+推荐使用 Netlify 部署示例站点（exampleSite）。项目已包含 `netlify.toml`，开箱即用。
 
-## ✨ 特性
+### 一键部署
 
-- 📱 **响应式设计** - 完美适配手机、平板、桌面
+1. 登录 [Netlify](https://app.netlify.com)
+2. 选择 “Import an existing project” 并绑定 GitHub 仓库 `ifeitao/hugo-theme-resound`
+3. 保持默认构建设置（本仓库已提供 `netlify.toml`）
+4. 部署完成后访问分配的域名
+
+### 构建配置说明
+
+- 生产构建使用 `$URL` 作为 `baseURL`
+- 预览构建使用 `$DEPLOY_PRIME_URL` 作为 `baseURL`
+- 输出目录：`exampleSite/public`
+
+### 状态徽章
+
+在 README 顶部加入 Netlify 状态徽章（将 `YOUR-SITE-ID` 和 `YOUR-SITE-NAME` 替换为你的站点信息）：
+
+```
+[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-SITE-ID/deploy-status)](https://app.netlify.com/sites/YOUR-SITE-NAME/deploys)
+```
+
+> 站点 ID 可在 Netlify 控制台的 Site settings → Status badges 中获取。
 - 🌓 **暗黑模式** - 自动跟随系统，支持手动切换
 - 🎯 **侧边栏导航** - 抽屉式设计，支持多级菜单
 - 📚 **文章目录 (TOC)** - 自动生成，滚动高亮
@@ -475,7 +495,7 @@ Copyright (c) 2024 ifeitao
 ## 🔗 链接
 
 - **主题仓库**: https://github.com/ifeitao/hugo-theme-resound
-- **示例站点**: https://yifeitao.com/hugo-theme-resound/
+- **示例站点**: https://hugo-theme-resound.netlify.app/
 - **Hugo 官方文档**: https://gohugo.io/documentation/
 
 ---

@@ -11,7 +11,7 @@
 
 [![Hugo](https://img.shields.io/badge/Hugo-%5E0.100.0-ff4088?style=flat-square&logo=hugo)](https://gohugo.io/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Demo](https://img.shields.io/badge/Demo-Live-success?style=flat-square)](https://ifeitao.github.io/hugo-theme-resound/)
+[![Demo](https://img.shields.io/badge/Demo-Live-success?style=flat-square)](https://hugo-theme-resound.netlify.app/)
 
 ## 📸 在线演示
 

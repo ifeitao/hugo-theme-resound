@@ -1,4 +1,4 @@
-baseURL = 'https://ifeitao.github.io/hugo-theme-resound/'
+baseURL = 'https://hugo-theme-resound.netlify.app/'
 languageCode = 'zh-CN'
 defaultContentLanguage = 'zh-cn'
 title = 'Resound 主题示例站点'

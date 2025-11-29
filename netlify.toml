@@ -1,5 +1,6 @@
 [build]
   publish = "exampleSite/public"
+  # default (fallback) build uses preview URL to avoid cross-origin
   command = "cd exampleSite && hugo --gc --minify -b $DEPLOY_PRIME_URL"
 
 [build.environment]
@@ -9,6 +10,9 @@
 
 [context.production.environment]
   HUGO_ENV = "production"
+[context.production]
+  # In production deploys, point baseURL to Netlify site URL to ensure same-origin assets
+  command = "cd exampleSite && hugo --gc --minify -b $URL"
 
 [context.deploy-preview]
   command = "cd exampleSite && hugo --gc --minify --buildFuture -b $DEPLOY_PRIME_URL"

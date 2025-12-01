@@ -409,6 +409,76 @@ Supports featured posts feature:
 
 Supports related posts recommendation on post detail pages. The system automatically finds related posts based on the post's categories, tags, etc., using Hugo's built-in .Related mechanism.
 
+### Article Revision History
+
+Supports displaying a revision version selector in articles, allowing readers to view different historical versions of the article. This is especially useful for technical documentation, tutorials, and other content that requires long-term maintenance and updates.
+
+> **💡 Recommended Tool**: Highly recommended to use with [hugo-revise](https://github.com/ifeitao/hugo-revise) tool, which automates article revision management, automatically generates Page Bundle structure and updates front matter, greatly simplifying the version management workflow.
+
+**Quick Start:**
+
+1. **Install hugo-revise tool** (Recommended):
+
+```bash
+# macOS/Linux
+curl -fsSL https://raw.githubusercontent.com/ifeitao/hugo-revise/main/install.sh | bash
+
+# Or install via Go
+go install github.com/ifeitao/hugo-revise@latest
+```
+
+2. **Create a new revision for your article**:
+
+```bash
+# Run in your article directory
+hugo-revise create content/posts/my-article.md
+```
+
+The tool will automatically:
+- Convert the current article to Page Bundle structure
+- Save the current version to `revisions/date/` directory
+- Update the `revisions_history` field in front matter
+- Generate a new latest version for editing
+
+**Manual Configuration:**
+
+If not using the tool, you can manually add the `revisions_history` field in front matter:
+
+```yaml
+---
+title: "My Article"
+date: 2024-01-01
+revisions_history:
+  - "2024-01-01"
+  - "2024-06-15"
+  - "2024-12-01"
+---
+```
+
+And manually create the Page Bundle structure:
+
+```
+content/posts/my-article/
+  ├── index.md              # Latest version
+  └── revisions/
+      ├── 2024-01-01/
+      │   └── index.md      # First version
+      └── 2024-06-15/
+          └── index.md      # Second version
+```
+
+**Features:**
+
+- Automatically generates a version selector dropdown at the top of the article
+- Latest version displays at the main URL path, historical versions are stored in `/revisions/version-number/` subpaths
+- Supports no-JavaScript environments (noscript fallback to version link list)
+- Dropdown styling follows the theme, supports dark mode
+
+**Learn More:**
+
+- hugo-revise tool documentation: https://github.com/ifeitao/hugo-revise
+- Hugo Page Bundle documentation: https://gohugo.io/content-management/page-bundles/
+
 ## 📝 License
 
 MIT License

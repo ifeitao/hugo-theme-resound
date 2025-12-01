@@ -19,6 +19,9 @@
 
   <article>
   {{ partial "article-expiration.html" . }}
+  {{ if .Params.revisions_history }}
+  {{ partial "revision-history.html" . }}
+  {{ end }}
   {{ .Content }}
   </article>
   <div class="social-share"></div>

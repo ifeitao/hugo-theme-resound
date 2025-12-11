@@ -1,0 +1,40 @@
+{{- /* Replace wikilink syntax [[filename]] with links to matching pages */ -}}
+{{- $page := .Page | default . -}}
+{{- $content := .Content -}}
+{{- if not $content }}{{- $content = $page.Content -}}{{ end -}}
+{{- $matches := findRE `\[\[([^\]]+)\]\]` $content -}}
+{{- if not (len $matches) }}{{- $content | safeHTML -}}{{- else -}}
+{{- $pages := $page.Site.RegularPages -}}
+{{- $cache := newScratch -}}
+{{- range $matches }}
+  {{- $raw := . -}}
+  {{- if not ($cache.Get $raw) }}
+    {{- $name := replaceRE `(?m)^\s+|\s+$` "" (replaceRE `^\[\[|\]\]$` "" $raw) -}}
+    {{- $clean := replaceRE `\.(md|markdown)$` "" $name -}}
+    {{- $lower := lower $clean -}}
+    {{- $target := "" -}}
+    {{- range $pages }}
+      {{- if and (eq $target "") .File }}
+        {{- $baseName := lower .File.ContentBaseName -}}
+        {{- $dirPath := .File.Dir -}}
+        {{- $dirName := "" -}}
+        {{- if $dirPath }}
+          {{- $dirName = lower (path.Base (strings.TrimSuffix "/" $dirPath)) -}}
+        {{- end -}}
+        {{- if or (eq $baseName $lower) (eq $dirName $lower) }}
+          {{- $target = .RelPermalink -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $replacement := "" -}}
+    {{- if ne $target "" }}
+      {{- $replacement = printf `<a class="wikilink" href="%s">%s</a>` $target (htmlEscape $name) -}}
+    {{- else }}
+      {{- $replacement = printf `<span class="wikilink wikilink-missing">%s</span>` (htmlEscape $name) -}}
+    {{- end -}}
+    {{- $cache.Set $raw $replacement -}}
+  {{- end -}}
+  {{- $content = replace $content $raw ($cache.Get $raw) -}}
+{{- end -}}
+{{- $content | safeHTML -}}
+{{- end -}}

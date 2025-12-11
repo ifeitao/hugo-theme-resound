@@ -366,6 +366,42 @@ Intro text still renders above the gallery—use it for notes. Click thumbnails 
 
 - Quick start: `hugo new gallery/my-album/index.md` (theme ships with `archetypes/gallery.md`); then add images via Markdown as above.
 
+### Wiki Links
+
+The theme supports Wiki-style double bracket link syntax for quick cross-referencing to other posts within your site.
+
+**Syntax:**
+```markdown
+[[filename]]
+```
+
+**Examples:**
+```markdown
+See [[hugo-guide]] and [[markdown-guide]] for more information.
+```
+
+**Features:**
+- Automatically matches posts by filename or Page Bundle directory name
+- Supports filename references without `.md` extension
+- Auto-generates permalink to the target post
+- If target doesn't exist, displays as a span with `wikilink-missing` class for custom styling
+- Case-insensitive matching
+
+**CSS Customization:**
+
+Customize Wiki link styles with these CSS classes:
+```css
+.wikilink {
+  /* Style for existing links */
+}
+
+.wikilink-missing {
+  /* Style for missing links, e.g., red or dotted underline */
+  color: #d32f2f;
+  text-decoration: underline dotted;
+}
+```
+
 ### Video Embeds
 
 Use built-in shortcodes instead of writing raw `<iframe>` code.

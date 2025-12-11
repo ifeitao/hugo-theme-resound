@@ -1,7 +1,7 @@
 {{ define "main" }}
 <div class="page">
   <h1 class="page-title">{{ .Title }}</h1>
-  <article>{{ .Content }}</article>
+  <article>{{ partial "wikilinks.html" (dict "Page" . "Content" .Content) }}</article>
   <div class="social-share"></div>
   
   {{ if and .Params.comment .Site.Params.comments_provider }}

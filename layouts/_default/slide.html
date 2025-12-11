@@ -25,7 +25,7 @@
 <body>
     <div class="reveal">
         <div class="slides">
-            {{ $content := .Content }}
+            {{ $content := partial "wikilinks.html" (dict "Page" . "Content" .Content) }}
             {{ $content = replace $content "<p>..</p>" "</section><section>" }}
             {{ $content = replace $content "<p>...</p>" "</section></section><section><section>" }}
             {{ $content = replace $content "<p>…</p>" "</section></section><section><section>" }}

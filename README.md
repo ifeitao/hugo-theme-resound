@@ -389,6 +389,42 @@ graph TD
 
 - 快速创建：`hugo new gallery/my-album/index.md`（主题提供 `archetypes/gallery.md`），按上述 Markdown 方式插入图片即可。
 
+### Wiki 链接
+
+主题支持 Wiki 风格的双中括号链接语法，可以快速链接到站内的其他文章。
+
+**语法：**
+```markdown
+[[文件名]]
+```
+
+**示例：**
+```markdown
+参见 [[hugo-guide]] 和 [[markdown-guide]] 了解更多信息。
+```
+
+**特性：**
+- 自动根据文件名或 Page Bundle 目录名匹配对应的文章
+- 支持不带 `.md` 扩展名的文件名引用
+- 自动生成到目标文章的永久链接
+- 如果目标文章不存在，显示为带 `wikilink-missing` 类的 span，方便自定义样式
+- 匹配时不区分大小写
+
+**CSS 自定义：**
+
+可以通过以下 CSS 类定制 Wiki 链接的样式：
+```css
+.wikilink {
+  /* 存在的链接样式 */
+}
+
+.wikilink-missing {
+  /* 不存在的链接样式，例如红色或虚线 */
+  color: #d32f2f;
+  text-decoration: underline dotted;
+}
+```
+
 ### 视频嵌入
 
 无需写原始 `<iframe>`，使用内置短代码：

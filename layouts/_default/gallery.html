@@ -1,0 +1,145 @@
+{{ define "main" }}
+<div class="gallery-page">
+  <h1 class="page-title">{{ .Title }}</h1>
+  {{ with (or .Params.description .Params.lead) }}
+  <p class="page-description">{{ . }}</p>
+  {{ end }}
+
+  {{/* Render intro text but strip inline images to avoid duplicate rendering */}}
+  {{ $intro := .RawContent | replaceRE "!\\[[^\\]]*\\]\\([^\\)]+\\)" "" | markdownify }}
+  {{ if gt (len (plainify $intro)) 0 }}
+    <div class="page-intro">{{ $intro }}</div>
+  {{ end }}
+
+    {{/* Extract images from Markdown body: ![alt](src) using raw content; supports relative paths and external URLs */}}
+    {{ $page := . }}
+    {{ $prevLabel := i18n "galleryPrev" }}
+    {{ $nextLabel := i18n "galleryNext" }}
+    {{ $closeLabel := i18n "galleryClose" }}
+    {{ $emptyText := i18n "galleryEmpty" }}
+    {{ $matches := findRESubmatch `!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)` .RawContent }}
+    {{ $images := slice }}
+    {{ range $matches }}
+      {{ $altRaw := index . 1 | plainify }}
+      {{ $srcRaw := trim (index . 2) " \t\n\r" }}
+      {{ $srcClean := replaceRE "^\\./" "" $srcRaw }}
+      {{ $isRemote := or (hasPrefix $srcClean "http://") (hasPrefix $srcClean "https://") (hasPrefix $srcClean "//") }}
+      {{ $isRoot := hasPrefix $srcClean "/" }}
+      {{ $url := $srcClean }}
+      {{ if $isRemote }}
+        {{/* keep remote url as-is */}}
+      {{ else if $isRoot }}
+        {{/* already site-absolute */}}
+      {{ else }}
+        {{/* relative to this page bundle path */}}
+        {{ $url = printf "%s%s" $page.RelPermalink $srcClean }}
+      {{ end }}
+
+      {{ $altText := $altRaw }}
+      {{ if not $altText }}
+        {{ $basename := replaceRE "^.+/" "" $srcClean | replaceRE "\\?.*$" "" }}
+        {{ $altText = replaceRE "\\.[^.]+$" "" $basename | plainify }}
+      {{ end }}
+      {{ $caption := $altText }}
+
+      {{ $images = $images | append (dict "thumb" $url "full" $url "alt" $altText "caption" $caption) }}
+    {{ end }}
+
+  {{ if not (len $images) }}
+      <p class="gallery-empty">{{ $emptyText }}</p>
+  {{ else }}
+    <div class="gallery-grid" id="gallery-grid">
+      {{ range $index, $image := $images }}
+        <button class="gallery-item" type="button"
+          data-index="{{ $index }}"
+          data-full="{{ $image.full }}"
+          data-alt="{{ $image.alt }}"
+          data-caption="{{ $image.caption }}">
+          <span class="gallery-thumb">
+            <img src="{{ $image.thumb }}" alt="{{ $image.alt }}" loading="lazy">
+          </span>
+        </button>
+      {{ end }}
+    </div>
+
+    <div class="gallery-lightbox" id="gallery-lightbox" hidden role="dialog" aria-modal="true" tabindex="-1">
+      <button class="gallery-close" type="button" aria-label="{{ $closeLabel }}">×</button>
+      <button class="gallery-nav prev" type="button" aria-label="{{ $prevLabel }}">‹</button>
+      <figure class="gallery-figure">
+        <img id="gallery-large" alt="">
+        <figcaption id="gallery-caption"></figcaption>
+      </figure>
+      <button class="gallery-nav next" type="button" aria-label="{{ $nextLabel }}">›</button>
+    </div>
+
+    <script>
+      (() => {
+        const grid = document.getElementById('gallery-grid');
+        const lightbox = document.getElementById('gallery-lightbox');
+        if (!grid || !lightbox) return;
+
+        const items = Array.from(grid.querySelectorAll('.gallery-item'));
+        const imageEl = document.getElementById('gallery-large');
+        const captionEl = document.getElementById('gallery-caption');
+        const closeBtn = lightbox.querySelector('.gallery-close');
+        const prevBtn = lightbox.querySelector('.gallery-nav.prev');
+        const nextBtn = lightbox.querySelector('.gallery-nav.next');
+        let activeIndex = -1;
+
+        const setImage = (index) => {
+          const target = items[index];
+          if (!target) return;
+          activeIndex = index;
+          imageEl.src = target.dataset.full;
+          imageEl.alt = target.dataset.alt || '';
+          captionEl.textContent = target.dataset.caption || '';
+        };
+
+        const open = (index) => {
+          setImage(index);
+          lightbox.hidden = false;
+          document.body.classList.add('gallery-locked');
+          lightbox.focus();
+        };
+
+        const close = () => {
+          lightbox.hidden = true;
+          document.body.classList.remove('gallery-locked');
+          activeIndex = -1;
+        };
+
+        const move = (delta) => {
+          if (activeIndex < 0) return;
+          const next = (activeIndex + delta + items.length) % items.length;
+          setImage(next);
+        };
+
+        items.forEach((btn, index) => {
+          btn.addEventListener('click', () => open(index));
+          btn.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              open(index);
+            }
+          });
+        });
+
+        closeBtn?.addEventListener('click', close);
+        prevBtn?.addEventListener('click', () => move(-1));
+        nextBtn?.addEventListener('click', () => move(1));
+
+        lightbox.addEventListener('click', (event) => {
+          if (event.target === lightbox) close();
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (lightbox.hidden) return;
+          if (event.key === 'Escape') close();
+          if (event.key === 'ArrowRight') move(1);
+          if (event.key === 'ArrowLeft') move(-1);
+        });
+      })();
+    </script>
+  {{ end }}
+</div>
+{{ end }}

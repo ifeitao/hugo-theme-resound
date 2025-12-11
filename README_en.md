@@ -351,6 +351,21 @@ graph TD
 ```
 ```
 
+### Image Gallery
+
+- Set `layout: "gallery"` in front matter, then add images in the body with standard Markdown: `![optional caption](path-or-url)`. Both relative paths (page bundle) and external URLs are supported.
+- If no caption is provided, the filename (without extension) is used. Body images are consumed to build the grid and lightbox; they won’t render inline.
+- Example:
+
+```markdown
+![Cover](cover-192.png)
+![External](https://via.placeholder.com/900x600.png?text=External+Image)
+```
+
+Intro text still renders above the gallery—use it for notes. Click thumbnails to open the lightbox; arrow keys navigate, Esc closes.
+
+- Quick start: `hugo new gallery/my-album/index.md` (theme ships with `archetypes/gallery.md`); then add images via Markdown as above.
+
 ### Video Embeds
 
 Use built-in shortcodes instead of writing raw `<iframe>` code.

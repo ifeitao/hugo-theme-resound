@@ -374,6 +374,21 @@ graph TD
 ```
 ```
 
+### 图片画廊
+
+- 页面 front matter 只需设置 `layout: "gallery"`，其余图片全部在正文使用标准 Markdown 语法：`![可选描述](路径或外链)`。
+- 同时支持本地相对路径和外链；如果没有写描述，自动使用图片文件名（去掉扩展名）作为描述/标题。
+- 示例：
+
+```markdown
+![封面图](cover-192.png)
+![外链图](https://via.placeholder.com/900x600.png?text=External+Image)
+```
+
+正文的文字会显示在画廊顶部，可写导语或说明；图片会生成网格缩略图，点击进入幻灯片，支持左右键切换、Esc 退出。
+
+- 快速创建：`hugo new gallery/my-album/index.md`（主题提供 `archetypes/gallery.md`），按上述 Markdown 方式插入图片即可。
+
 ### 视频嵌入
 
 无需写原始 `<iframe>`，使用内置短代码：

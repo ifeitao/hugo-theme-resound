@@ -61,3 +61,15 @@ other = "更多文章"
 
 [rss]
 other = "RSS 订阅"
+
+[galleryPrev]
+other = "上一张"
+
+[galleryNext]
+other = "下一张"
+
+[galleryClose]
+other = "关闭"
+
+[galleryEmpty]
+other = "暂无图片，请在正文中使用 Markdown 图片语法（本地相对路径或外链）插入图片后自动生成画廊。"

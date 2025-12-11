@@ -61,3 +61,15 @@ other = "More Articles"
 
 [rss]
 other = "RSS Feed"
+
+[galleryPrev]
+other = "Previous"
+
+[galleryNext]
+other = "Next"
+
+[galleryClose]
+other = "Close"
+
+[galleryEmpty]
+other = "No images. Insert Markdown images in the body (local or external) to build the gallery."

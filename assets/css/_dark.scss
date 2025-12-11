@@ -58,6 +58,18 @@
   // Overlay
   #overlay { background: rgba(0,0,0,0.9); }
 
+  // Gallery
+  .gallery-thumb { background: #1a1a1a; }
+  .gallery-item { box-shadow: 0 10px 26px rgba(0, 0, 0, 0.32); }
+  .gallery-item:hover { box-shadow: 0 16px 32px rgba(0, 0, 0, 0.42); }
+  .gallery-lightbox { background: rgba(0, 0, 0, 0.92); }
+  .gallery-figure figcaption { color: #e5e5e5; }
+  .gallery-figure { align-items: center; }
+  .gallery-close,
+  .gallery-nav { background: rgba(255, 255, 255, 0.1); color: #f7f7f7; }
+  .gallery-close:hover,
+  .gallery-nav:hover { background: rgba(255, 255, 255, 0.18); }
+
   // Sidebar and toggle
   .sidebar { background-color: #1f1f1f; color: rgba(255,255,255,0.85); box-shadow: rgba(0, 0, 0, 0.6) 0 6px 24px; }
   .sidebar-nav { border-bottom-color: rgba(255,255,255,0.08); }

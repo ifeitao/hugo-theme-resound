@@ -49,11 +49,11 @@
     </a>
     
     <!-- Language switcher -->
-    {{ if gt (len .Site.Languages) 1 }}
+    {{ if gt (len .AllTranslations) 1 }}
     <div class="language-switcher">
-      {{ range .Site.Languages }}
-        {{ if ne $.Site.Language.LanguageCode .LanguageCode }}
-          <a class="sidebar-nav-item" href="{{ .LanguageCode | relURL }}">{{ .LanguageName }}</a>
+      {{ range .AllTranslations }}
+        {{ if ne $.Site.Language.Lang .Language.Lang }}
+          <a class="sidebar-nav-item" href="{{ .RelPermalink }}">{{ .Language.LanguageName }}</a>
         {{ end }}
       {{ end }}
     </div>

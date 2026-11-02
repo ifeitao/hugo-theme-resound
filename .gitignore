@@ -6,7 +6,6 @@ hugo_stats.json
 exampleSite/public/
 exampleSite/resources/
 exampleSite/.hugo_build.lock
-exampleSite/themes/
 
 # OS files
 .DS_Store

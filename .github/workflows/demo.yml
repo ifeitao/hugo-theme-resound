@@ -42,9 +42,6 @@ jobs:
           HUGO_ENV: production
         run: |
           cd exampleSite
-          # Create symlink to parent directory as theme
-          mkdir -p themes
-          ln -s ../../ themes/resound
           hugo \
             --gc \
             --minify \

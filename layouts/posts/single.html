@@ -19,7 +19,7 @@
 
   <article>
   {{ partial "article-expiration.html" . }}
-  {{ if .Params.revisions_history }}
+  {{ if .Params.revisions }}
   {{ partial "revision-history.html" . }}
   {{ end }}
   {{ partial "wikilinks.html" (dict "Page" . "Content" .Content) }}

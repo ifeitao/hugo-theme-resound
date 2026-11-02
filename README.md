@@ -480,73 +480,77 @@ TODO
 
 ### 文章修订历史
 
-支持在文章中显示修订版本选择器,让读者可以查看文章的不同历史版本。这对于需要长期维护和更新的技术文档、教程等内容特别有用。
+在文章里显示版本选择器，让读者在「最新版」和「历史版本」之间切换。适合长期维护的教程、文档，以及会被大幅改写的文章。
 
-> **💡 推荐工具**: 强烈建议配合 [hugo-revise](https://github.com/ifeitao/hugo-revise) 工具使用,它可以自动化管理文章修订版本,自动生成 Page Bundle 结构和更新 front matter,大大简化版本管理流程。
+> **配套工具**：`tools/revise`（Go 编写）。它是**写作时**用的命令，不参与 `hugo` 构建 —— 不装它站点照常构建，只是没有版本选择器。
 
-**快速开始:**
+**为什么需要工具**
 
-1. **安装 hugo-revise 工具** (推荐方式):
+归档一个版本本质上是三件事：复制当前正文、给副本一个固定 URL、把版本列表写进 front matter。手工做十几次必然出错（同一天改两次、文件里已经有这些字段时尤其明显）。工具把这三步做对，并提供 `undo`。
 
-```bash
-# macOS/Linux
-curl -fsSL https://raw.githubusercontent.com/ifeitao/hugo-revise/main/install.sh | bash
-
-# 或使用 Go 安装
-go install github.com/ifeitao/hugo-revise@latest
-```
-
-2. **创建文章的新修订版本**:
+**安装**
 
 ```bash
-# 在文章目录下执行
-hugo-revise create content/posts/my-article.md
+# 已有 Go
+go install github.com/ifeitao/hugo-theme-resound/tools/cmd/revise@latest
+
+# 或者从 Releases 下载对应平台的二进制，无需安装 Go
 ```
 
-工具会自动:
-- 将当前文章转换为 Page Bundle 结构
-- 保存当前版本到 `revisions/日期/` 目录
-- 更新 front matter 中的 `revisions_history` 字段
-- 生成新的最新版本供编辑
+**用法**
 
-**手动配置方法:**
+```bash
+# 归档当前版本，把今天记为新的版本标签
+revise content/posts/my-article.md
 
-如果不使用工具,可以手动在 front matter 中添加 `revisions_history` 字段:
+# 同一天要出第二版
+revise --label 2026-11-03-2 content/posts/my-article.md
+
+# permalink 带日期/自定义 slug 时，显式指定一次页面 URL
+revise --base-url /2024/01/10/my-article/ content/posts/my-article.md
+
+# 撤销上一次修订
+revise undo content/posts/my-article.md
+```
+
+运行前先 `git commit`。工具不是版本库，`git checkout -- content` 才是最后的保险。
+
+**它做了什么**
+
+```
+content/posts/
+├── my-article.md                    # 最新版：date 不变，只更新 lastmod
+└── my-article.revisions/
+    ├── 2024-01-10.md                # 第一版（归档副本）
+    └── 2026-11-03.md                # 第二版
+```
+
+- 归档副本放在 `<名字>.revisions/<标签>`，是文章的**同级目录**，不放进 page bundle 内部（bundle 根只允许一个 `.md`）
+- 归档页固定到 `<主 URL>revisions/<标签>/`，并带 `build: {list: never, render: true}`：可直接访问，但不进列表、分类、RSS、搜索和 sitemap
+- 当前页只更新 `lastmod`，**从不改 `date`** —— 日期型 permalink 下改 `date` 会悄悄换掉文章 URL，把外链和收录打散
+
+**Front matter 约定（schema 1）**
 
 ```yaml
----
-title: "我的文章"
-date: 2024-01-01
-revisions_history:
-  - "2024-01-01"
-  - "2024-06-15"
-  - "2024-12-01"
----
+revisions_schema: 1
+revision_current: "2026-11-03"          # 本页是哪一版
+revisions:                              # 标签 → URL，主题只读这个列表
+  - label: "2024-01-10"
+    url: "/2024/01/10/my-article/revisions/2024-01-10/"
+  - label: "2026-11-03"
+    url: "/2024/01/10/my-article/"
 ```
 
-并手动创建 Page Bundle 结构:
+主题不解析 URL、不拼路径，只遍历这个列表；`revisions_schema` 不是 `1` 时不渲染选择器（旧主题遇到新工具是「不显示」，而不是坏链接）。
 
-```
-content/posts/my-article/
-  ├── index.md              # 最新版本
-  └── revisions/
-      ├── 2024-01-01/
-      │   └── index.md      # 第一版
-      └── 2024-06-15/
-          └── index.md      # 第二版
-```
+**不用工具时**
 
-**功能特性:**
+没有 `revisions` 字段的页面什么都不渲染，无需任何配置。手工归档也可以，按上面的目录结构和 front matter 约定放好文件即可。
 
-- 自动在文章顶部生成版本选择下拉框
-- 最新版本显示在主URL路径,历史版本存放在 `/revisions/版本号/` 子路径
-- 支持无JavaScript环境(noscript降级为版本链接列表)
-- 下拉框样式跟随主题,支持暗黑模式
+**了解更多**
 
-**了解更多:**
-
-- hugo-revise 工具文档: https://github.com/ifeitao/hugo-revise
-- Hugo Page Bundle 文档: https://gohugo.io/content-management/page-bundles/
+- 工具源码与说明：[tools/README.md](tools/README.md)
+- Hugo page bundle 文档：https://gohugo.io/content-management/page-bundles/
 
 ## 📝 许可证
 

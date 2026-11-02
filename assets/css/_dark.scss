@@ -11,6 +11,15 @@
   .container a { color: $dark-link-color; }
   .post-date, .tags-expo-section .post-date { color: #9a9a9a; }
 
+  // Revision history selector
+  .revision-history { background: #1b1b1b; border-color: #2a2a2a; }
+  .revision-history-label { color: #9a9a9a; }
+  .revision-history-select {
+    color: #d0d0d0;
+    background: #1b1b1b;
+    border-color: #2a2a2a;
+  }
+
   // Page & post titles
   .page-title,
   .post-title,

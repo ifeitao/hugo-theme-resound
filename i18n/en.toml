@@ -73,3 +73,6 @@ other = "Close"
 
 [galleryEmpty]
 other = "No images. Insert Markdown images in the body (local or external) to build the gallery."
+
+[revisionHistory]
+other = "Version"

@@ -462,73 +462,77 @@ Supports related posts recommendation on post detail pages. The system automatic
 
 ### Article Revision History
 
-Supports displaying a revision version selector in articles, allowing readers to view different historical versions of the article. This is especially useful for technical documentation, tutorials, and other content that requires long-term maintenance and updates.
+Shows a version selector in an article so readers can switch between the live version and older ones. Useful for tutorials and docs that stay alive, or for posts that get substantial rewrites.
 
-> **💡 Recommended Tool**: Highly recommended to use with [hugo-revise](https://github.com/ifeitao/hugo-revise) tool, which automates article revision management, automatically generates Page Bundle structure and updates front matter, greatly simplifying the version management workflow.
+> **Companion tool**: `tools/revise` (written in Go). It runs at *writing* time and never participates in the `hugo` build — without it the site still builds, just without the selector.
 
-**Quick Start:**
+**Why a tool at all**
 
-1. **Install hugo-revise tool** (Recommended):
+Archiving a version is three steps: copy the body, pin the copy to a URL, record the label → URL list in front matter. Doing that by hand a dozen times goes wrong (twice in one day, or when the keys already exist). The tool gets those three steps right and adds `undo`.
 
-```bash
-# macOS/Linux
-curl -fsSL https://raw.githubusercontent.com/ifeitao/hugo-revise/main/install.sh | bash
-
-# Or install via Go
-go install github.com/ifeitao/hugo-revise@latest
-```
-
-2. **Create a new revision for your article**:
+**Install**
 
 ```bash
-# Run in your article directory
-hugo-revise create content/posts/my-article.md
+# With Go
+go install github.com/ifeitao/hugo-theme-resound/tools/cmd/revise@latest
+
+# Or download the binary for your platform from Releases (no Go needed)
 ```
 
-The tool will automatically:
-- Convert the current article to Page Bundle structure
-- Save the current version to `revisions/date/` directory
-- Update the `revisions_history` field in front matter
-- Generate a new latest version for editing
+**Usage**
 
-**Manual Configuration:**
+```bash
+# Archive the current version and label the new one with today's date
+revise content/posts/my-article.md
 
-If not using the tool, you can manually add the `revisions_history` field in front matter:
+# Second revision on the same day
+revise --label 2026-11-03-2 content/posts/my-article.md
+
+# When [permalinks] rewrites the path, pass the page URL once
+revise --base-url /2024/01/10/my-article/ content/posts/my-article.md
+
+# Undo the last revision
+revise undo content/posts/my-article.md
+```
+
+Commit before running. The tool is not a version control system; `git checkout -- content` is the real safety net.
+
+**What it does**
+
+```
+content/posts/
+├── my-article.md                    # live page: date untouched, lastmod updated
+└── my-article.revisions/
+    ├── 2024-01-10.md                # first version (archived copy)
+    └── 2026-11-03.md                # second version
+```
+
+- Archives live in `<name>.revisions/<label>`, a **sibling** of the page — never inside a page bundle, whose root may hold only one `.md`
+- Archived pages are pinned to `<base URL>revisions/<label>/` with `build: {list: never, render: true}`: reachable directly, absent from lists, taxonomies, RSS, search and the sitemap
+- The live page only gets a new `lastmod`; `date` is **never** rewritten — under date-based permalinks that would silently move the article URL and break every inbound link
+
+**Front matter contract (schema 1)**
 
 ```yaml
----
-title: "My Article"
-date: 2024-01-01
-revisions_history:
-  - "2024-01-01"
-  - "2024-06-15"
-  - "2024-12-01"
----
+revisions_schema: 1
+revision_current: "2026-11-03"          # which version this file is
+revisions:                              # label → URL; the theme only reads this
+  - label: "2024-01-10"
+    url: "/2024/01/10/my-article/revisions/2024-01-10/"
+  - label: "2026-11-03"
+    url: "/2024/01/10/my-article/"
 ```
 
-And manually create the Page Bundle structure:
+The theme never parses URLs or rebuilds paths — it iterates the list. A `revisions_schema` other than `1` renders nothing, so an old theme degrades instead of linking to missing pages.
 
-```
-content/posts/my-article/
-  ├── index.md              # Latest version
-  └── revisions/
-      ├── 2024-01-01/
-      │   └── index.md      # First version
-      └── 2024-06-15/
-          └── index.md      # Second version
-```
+**Without the tool**
 
-**Features:**
+Pages without a `revisions` field render nothing and need no configuration. Manual archiving works too: follow the directory layout and front matter contract above.
 
-- Automatically generates a version selector dropdown at the top of the article
-- Latest version displays at the main URL path, historical versions are stored in `/revisions/version-number/` subpaths
-- Supports no-JavaScript environments (noscript fallback to version link list)
-- Dropdown styling follows the theme, supports dark mode
+**Learn more**
 
-**Learn More:**
-
-- hugo-revise tool documentation: https://github.com/ifeitao/hugo-revise
-- Hugo Page Bundle documentation: https://gohugo.io/content-management/page-bundles/
+- Tool source and options: [tools/README.md](tools/README.md)
+- Hugo page bundle docs: https://gohugo.io/content-management/page-bundles/
 
 ## 📝 License
 

@@ -22,3 +22,7 @@ Thumbs.db
 # Temporary files
 *.log
 *.tmp
+
+# revise tool undo state (see tools/README.md)
+.hugo-revise/
+exampleSite/.hugo-revise/

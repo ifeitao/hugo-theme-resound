@@ -948,3 +948,50 @@ div#footnote-popup {
 .gallery-locked {
   overflow: hidden;
 }
+// Revision history selector (written by tools/cmd/revise)
+.revision-history {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: $spacing-lg;
+  padding: 6px 10px;
+  background: $code-background;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+}
+
+.revision-history-label {
+  font-size: 0.9rem;
+  color: $light-text-color;
+  white-space: nowrap;
+}
+
+.revision-history-select {
+  padding: 4px 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: $text-color;
+  background: $background-color;
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.revision-history-select:hover {
+  border-color: $primary-color;
+}
+
+.revision-history-select:focus-visible {
+  outline: 2px solid $primary-color;
+  outline-offset: 1px;
+}
+
+.revision-history-plain {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 $spacing-lg;
+  padding: 0;
+  list-style: none;
+}

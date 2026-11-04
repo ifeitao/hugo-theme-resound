@@ -428,9 +428,24 @@ You can override styling via `.video-embed` in custom CSS.
 
 ## 🛠️ Custom Configuration
 
-### Theme Color Configuration
+### Theme Palette
 
-TODO
+The theme ships two palettes, each with a light and a dark half:
+
+| palette | Light | Dark |
+|---|---|---|
+| `resound` (default) | brick-red headings on white | brick-red accents on `#121212` |
+| `secevo` | evolution green `#1F4D3A` on paper `#F5F2EA` | moss `#A9C7B4` accents on ink `#1E1E1C` |
+
+```toml
+[params]
+  palette = 'secevo'   # resound or secevo, defaults to resound
+```
+
+Light/dark still follows the system setting, and the "toggle dark mode" item in the
+sidebar overrides it. Colours are compiled into the CSS at build time, so switching
+palettes means rebuilding. To go beyond the shipped palettes, edit the maps in
+`assets/css/_theme-colors.scss` or override the variables in custom CSS.
 
 ### Custom Font Configuration
 

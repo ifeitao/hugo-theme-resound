@@ -461,8 +461,11 @@ graph TD
 ```
 
 日间／夜间仍跟随系统设置，也可以在侧边栏点「切换暗黑模式」手动覆盖。
-配色在构建时编进 CSS，所以换 palette 需要重新构建；想改到配色表以外，改
-`assets/css/_theme-colors.scss` 里的调色板，或在自定义 CSS 里覆盖变量。
+
+所有调色板都会编成各自的 CSS 一起发出（未生效的那几份挂在 `media="not all"` 上），
+侧边栏里的「切换配色 · 名字」就地换一份，选择记在 localStorage，下次打开还是它。
+`palette` 只是首次访问的默认值。想改到配色表以外，改 `assets/css/_theme-colors.scss`
+里的调色板，或在自定义 CSS 里覆盖变量。
 
 ### 自定义字体配置
 

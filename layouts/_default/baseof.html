@@ -24,10 +24,13 @@
     {{ with .Site.Params.secondary_color_dark }}{{ $generatedScss = printf "%s$dark-secondary-color: %s;\n" $generatedScss . }}{{ end }}
     {{ with .Site.Params.link_color_dark }}{{ $generatedScss = printf "%s$dark-link-color: %s;\n" $generatedScss . }}{{ end }}
     {{/* Prepend dynamically generated palette so SCSS uses configured colors */}}
-    {{ $dynamicVars := resources.FromString "css/_generated-params.scss" $generatedScss }}
+    {{/* Name the generated file after its content: Hugo caches compiled Sass by resource
+         name, so a fixed name would keep serving the previous palette after a config change. */}}
+    {{ $sig := md5 $generatedScss }}
+    {{ $dynamicVars := resources.FromString (printf "css/_generated-%s.scss" $sig) $generatedScss }}
     {{ $mainScss := resources.Get "css/main.scss" }}
-    {{ $scssInput := slice $dynamicVars $mainScss | resources.Concat "css/main.generated.scss" }}
-    {{ $scssOptions := dict "targetPath" "css/main.css" "enableSourceMap" false }}
+    {{ $scssInput := slice $dynamicVars $mainScss | resources.Concat (printf "css/main-%s.generated.scss" $sig) }}
+    {{ $scssOptions := dict "targetPath" (printf "css/main-%s.css" $sig) "enableSourceMap" false }}
     {{ $styles := $scssInput | css.Sass $scssOptions | resources.Minify | resources.Fingerprint }}
     <link rel="stylesheet" href="{{ $styles.Permalink }}" integrity="{{ $styles.Data.Integrity }}" crossorigin="anonymous"> 
     {{ $syntax := resources.Get "css/_syntax.scss" | css.Sass | resources.Minify | resources.Fingerprint }}

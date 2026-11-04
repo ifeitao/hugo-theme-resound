@@ -86,11 +86,12 @@
   var chrome = {};
   try { chrome = JSON.parse(document.getElementById('palette-chrome').textContent); } catch (e) { /* noop */ }
 
+  var select = document.getElementById('palette-select');
+
   function apply(name) {
     links.forEach(function(l){ l.media = (l.getAttribute('data-palette') === name ? 'all' : 'not all'); });
     root.setAttribute('data-palette', name);
-    var label = document.getElementById('palette-toggle-label');
-    if (label) label.textContent = name;
+    if (select && select.value !== name) select.value = name;
     var lc = document.getElementById('theme-color-light');
     var dc = document.getElementById('theme-color-dark');
     if (chrome[name] && lc) lc.setAttribute('content', chrome[name].light);
@@ -101,14 +102,10 @@
   try { saved = localStorage.getItem(key); } catch (e) { /* noop */ }
   if (saved && names.indexOf(saved) >= 0) apply(saved);
 
-  var btn = document.getElementById('palette-toggle');
-  if (btn) {
-    btn.addEventListener('click', function(e){
-      e.preventDefault();
-      var i = names.indexOf(root.getAttribute('data-palette'));
-      var next = names[(i + 1) % names.length];
-      apply(next);
-      try { localStorage.setItem(key, next); } catch (err) { /* noop */ }
+  if (select) {
+    select.addEventListener('change', function(){
+      apply(this.value);
+      try { localStorage.setItem(key, this.value); } catch (err) { /* noop */ }
     });
   }
 })();

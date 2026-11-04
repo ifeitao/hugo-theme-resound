@@ -319,11 +319,36 @@ a.btn-common:hover {
   white-space: nowrap;
 }
 
-// The palette item carries the palette's name too; let it wrap instead of clipping.
-.sidebar-nav-item-palette {
+// Palette picker: a native select so adding palettes needs no new UI.
+.sidebar-palette {
+  display: flex;
+  align-items: center;
   white-space: normal;
   text-overflow: clip;
-  line-height: 1.35;
+}
+
+.sidebar-palette-label {
+  margin-right: 6px;
+  white-space: nowrap;
+}
+
+.sidebar-palette-select {
+  flex: 1;
+  min-width: 0;
+  padding: 2px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: inherit;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.sidebar-palette-select option {
+  color: #1e1e1c;
+  background-color: #f5f2ea;
 }
 
 .sidebar-nav-item-sub {

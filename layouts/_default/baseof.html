@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{{ $paletteNames := slice "resound" "secevo" }}
+{{ $paletteNames := partial "palette-names.html" . }}
 {{ $paletteName := .Site.Params.palette | default "resound" }}
 {{ if not (in $paletteNames $paletteName) }}{{ $paletteName = "resound" }}{{ end }}
 <html lang="{{ .Site.Language.LanguageCode }}" data-palette="{{ $paletteName }}">

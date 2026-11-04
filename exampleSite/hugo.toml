@@ -26,6 +26,8 @@ theme = 'resound'
   slogan = 'Make Your Content Resound - 让你的内容产生回响'
   author = 'Resound Theme'
   logo = '/logo.png'
+  # 'resound' (默认) 或 'secevo'，各自带日夜两套
+  palette = 'resound'
   addition = '</br>一个优雅的Hugo博客主题'
   
   # Navigation

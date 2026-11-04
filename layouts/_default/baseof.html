@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#ff9950">
     <title>
         {{- if eq .Title "Home" -}}
             {{ .Site.Title }} - {{ .Site.Params.slogan }}
@@ -13,13 +12,17 @@
         {{- end -}}
     </title>
     <!-- CSS -->
-    {{ $themeColor := .Site.Params.theme_color | default "#b82d23" }}
-    {{ $secondaryColor := .Site.Params.secondary_color | default "#941d15" }}
-    {{ $linkColor := .Site.Params.link_color | default $themeColor }}
-    {{ $darkPrimary := .Site.Params.theme_color_dark | default $themeColor }}
-    {{ $darkSecondary := .Site.Params.secondary_color_dark | default $secondaryColor }}
-    {{ $darkLink := .Site.Params.link_color_dark | default $darkPrimary }}
-    {{ $generatedScss := printf "$primary-color: %s;\n$secondary-color: %s;\n$link-color: %s;\n$dark-primary-color: %s;\n$dark-secondary-color: %s;\n$dark-link-color: %s;\n" $themeColor $secondaryColor $linkColor $darkPrimary $darkSecondary $darkLink }}
+    {{/* Named palette: resound | secevo (see README). Unknown names fall back to resound. */}}
+    {{ $paletteName := .Site.Params.palette | default "resound" }}
+    {{/* Per-site colour overrides. Not documented on purpose: a palette is the public way
+         to recolour the theme, these six variables are only an escape hatch. */}}
+    {{ $generatedScss := printf "$palette: %q;\n" $paletteName }}
+    {{ with .Site.Params.theme_color }}{{ $generatedScss = printf "%s$primary-color: %s;\n" $generatedScss . }}{{ end }}
+    {{ with .Site.Params.secondary_color }}{{ $generatedScss = printf "%s$secondary-color: %s;\n" $generatedScss . }}{{ end }}
+    {{ with .Site.Params.link_color }}{{ $generatedScss = printf "%s$link-color: %s;\n" $generatedScss . }}{{ end }}
+    {{ with .Site.Params.theme_color_dark }}{{ $generatedScss = printf "%s$dark-primary-color: %s;\n" $generatedScss . }}{{ end }}
+    {{ with .Site.Params.secondary_color_dark }}{{ $generatedScss = printf "%s$dark-secondary-color: %s;\n" $generatedScss . }}{{ end }}
+    {{ with .Site.Params.link_color_dark }}{{ $generatedScss = printf "%s$dark-link-color: %s;\n" $generatedScss . }}{{ end }}
     {{/* Prepend dynamically generated palette so SCSS uses configured colors */}}
     {{ $dynamicVars := resources.FromString "css/_generated-params.scss" $generatedScss }}
     {{ $mainScss := resources.Get "css/main.scss" }}
@@ -40,7 +43,10 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="manifest" href="/site.webmanifest">
-    <meta name="theme-color" content="{{ .Site.Params.theme_color | default "#b82d23" }}">
+    {{ $chromeColors := dict "resound" (dict "light" "#b82d23" "dark" "#121212") "secevo" (dict "light" "#f5f2ea" "dark" "#1e1e1c") }}
+    {{ $chrome := or (index $chromeColors $paletteName) (index $chromeColors "resound") }}
+    <meta name="theme-color" content="{{ .Site.Params.theme_color | default $chrome.light }}" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="{{ .Site.Params.theme_color_dark | default $chrome.dark }}" media="(prefers-color-scheme: dark)">
     {{ partial "seo.html" . }}
     <!-- RSS Feed -->
     {{ with .OutputFormats.Get "rss" -}}

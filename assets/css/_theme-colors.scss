@@ -1,19 +1,154 @@
-// Theme colors - Dynamically generated from Hugo config
-// These variables will be overridden by Hugo's SCSS processor
-$primary-color: #d85916 !default;
-$secondary-color: #530000 !default;
-$link-color: $primary-color !default;
+// Colour palettes — every colour the theme paints comes from here.
+//
+// Two palettes ship with the theme, each with a light and a dark half:
+//
+//   resound   warm brick red on white — the theme's original look
+//   secevo    evolution green on paper — the house palette of secevo.xyz
+//
+// `params.palette` picks one at build time (see README). A site that needs
+// something else can still inject $primary-color & friends through the
+// generated SCSS in baseof.html; the !default below keeps those wins.
+//
+// Keys, per mode: primary (headings/accents), secondary (post & page titles),
+// link, on-primary (text sitting on a primary-coloured surface), text, muted,
+// strong, quote, bg, panel (cards, TOC, popups), border, border-strong,
+// code-bg, code-inline-bg, code-inline, tag-bg, selection.
 
-// Additional theme colors derived from primary color
+$palette: "resound" !default;
+
+$palettes: (
+  resound: (
+    light: (
+      primary: #b82d23,
+      secondary: #941d15,
+      link: #b82d23,
+      on-primary: #ffffff,
+      text: #515151,
+      muted: #9a9a9a,
+      strong: #303030,
+      quote: #7a7a7a,
+      bg: #ffffff,
+      panel: #fcfcfc,
+      border: #eeeeee,
+      border-strong: #e5e5e5,
+      code-bg: #f9f9f9,
+      code-inline-bg: #f8f8f8,
+      code-inline: #bf616a,
+      tag-bg: #fffbf0,
+      selection: #fff159,
+    ),
+    dark: (
+      primary: #b82d23,
+      secondary: #941d15,
+      link: #b82d23,
+      on-primary: #ffffff,
+      text: #d0d0d0,
+      muted: #9a9a9a,
+      strong: #f0f0f0,
+      quote: #bdbdbd,
+      bg: #121212,
+      panel: #1b1b1b,
+      border: #2a2a2a,
+      border-strong: #333333,
+      code-bg: #1e1e1e,
+      code-inline-bg: #1a1a1a,
+      code-inline: #ffb4b4,
+      tag-bg: rgba(255, 255, 255, 0.08),
+      selection: #4a3d00,
+    ),
+  ),
+  secevo: (
+    light: (
+      primary: #1f4d3a,
+      secondary: #1e1e1c,
+      link: #1f4d3a,
+      on-primary: #f5f2ea,
+      text: #1e1e1c,
+      muted: #6f6f67,
+      strong: #1e1e1c,
+      quote: #55554e,
+      bg: #f5f2ea,
+      panel: #efeadd,
+      border: #e2dccd,
+      border-strong: #d5cebb,
+      code-bg: #ede7d9,
+      code-inline-bg: #ede7d9,
+      code-inline: #1f4d3a,
+      tag-bg: #dce5db,
+      selection: #a9c7b4,
+    ),
+    dark: (
+      // 墨黑作底、宣纸白作字、苔绿作强调——进化绿在墨黑上读不出来
+      primary: #a9c7b4,
+      secondary: #f5f2ea,
+      link: #a9c7b4,
+      on-primary: #1e1e1c,
+      text: #f5f2ea,
+      muted: #a9c7b4,
+      strong: #ffffff,
+      quote: #cfcbbe,
+      bg: #1e1e1c,
+      panel: #262521,
+      border: #35342e,
+      border-strong: #403e36,
+      code-bg: #24231e,
+      code-inline-bg: #2a2923,
+      code-inline: #c7dcc9,
+      tag-bg: rgba(169, 199, 180, 0.14),
+      selection: #1f4d3a,
+    ),
+  ),
+);
+
+// Read one key out of the chosen palette; unknown names fall back to resound.
+@function _palette($mode, $key) {
+  $chosen: map-get($palettes, $palette);
+  @if $chosen == null {
+    $chosen: map-get($palettes, "resound");
+  }
+  @return map-get(map-get($chosen, $mode), $key);
+}
+
+// Light half
+$primary-color: _palette(light, primary) !default;
+$secondary-color: _palette(light, secondary) !default;
+$link-color: _palette(light, link) !default;
+$on-primary-color: _palette(light, on-primary) !default;
+$text-color: _palette(light, text) !default;
+$light-text-color: _palette(light, muted) !default;
+$strong-color: _palette(light, strong) !default;
+$quote-color: _palette(light, quote) !default;
+$background-color: _palette(light, bg) !default;
+$panel-background: _palette(light, panel) !default;
+$border-color: _palette(light, border) !default;
+$border-strong-color: _palette(light, border-strong) !default;
+$code-background: _palette(light, code-bg) !default;
+$code-inline-background: _palette(light, code-inline-bg) !default;
+$code-inline-color: _palette(light, code-inline) !default;
+$tag-background: _palette(light, tag-bg) !default;
+$selection-background: _palette(light, selection) !default;
+
+// Dark half
+$dark-primary-color: _palette(dark, primary) !default;
+$dark-secondary-color: _palette(dark, secondary) !default;
+$dark-link-color: _palette(dark, link) !default;
+$dark-on-primary-color: _palette(dark, on-primary) !default;
+$dark-text-color: _palette(dark, text) !default;
+$dark-muted-color: _palette(dark, muted) !default;
+$dark-strong-color: _palette(dark, strong) !default;
+$dark-quote-color: _palette(dark, quote) !default;
+$dark-background-color: _palette(dark, bg) !default;
+$dark-panel-color: _palette(dark, panel) !default;
+$dark-border-color: _palette(dark, border) !default;
+$dark-border-strong-color: _palette(dark, border-strong) !default;
+$dark-code-background: _palette(dark, code-bg) !default;
+$dark-code-inline-background: _palette(dark, code-inline-bg) !default;
+$dark-code-inline-color: _palette(dark, code-inline) !default;
+$dark-tag-background: _palette(dark, tag-bg) !default;
+$dark-selection-background: _palette(dark, selection) !default;
+
+// Derived tones, kept for the rules that need a lighter/darker step.
 $primary-color-light: lighten($primary-color, 10%) !default;
 $primary-color-dark: darken($primary-color, 10%) !default;
 $secondary-color-light: lighten($secondary-color, 10%) !default;
 $secondary-color-dark: darken($secondary-color, 10%) !default;
-
-// Dark theme counterparts (must be provided via Hugo params or theme defaults)
-$dark-primary-color: $primary-color !default;
-$dark-secondary-color: $secondary-color !default;
-$dark-link-color: $link-color !default;
-
-// If secondary color is not provided, derive it from primary color
-$secondary-color: if($secondary-color == #941d15, darken($primary-color, 10%), $secondary-color) !default;

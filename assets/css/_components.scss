@@ -46,9 +46,9 @@ pre code table {
 blockquote {
   padding: $spacing-sm $spacing-xl;
   margin: $spacing-sm 0;
-  color: #7a7a7a;
+  color: $quote-color;
   background-color: $code-background;
-  border-left: 4px solid #cccccc;
+  border-left: 4px solid $border-strong-color;
 }
 
 blockquote p:last-child, 
@@ -70,13 +70,13 @@ img {
 table {
   margin-bottom: $spacing-md;
   width: 100%;
-  border: 1px solid #e5e5e5;
+  border: 1px solid $border-strong-color;
   border-collapse: collapse;
 }
 
 td, th {
   padding: 4px 8px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid $border-strong-color;
 }
 
 th:first-child {
@@ -96,10 +96,10 @@ tbody tr:nth-child(odd) th {
 }
 
 #markdown-toc {
-  border: 1px solid #eee;
+  border: 1px solid $border-color;
   max-width: 300px;
   padding: 0.5em 1em 1em 1em;
-  background-color: #fcfcfc;
+  background-color: $panel-background;
   font-size: 14px;
   line-height: 21px;
   margin-bottom: 10px;
@@ -195,8 +195,8 @@ tbody tr:nth-child(odd) th {
     white-space: nowrap;
     display: block;
     padding: 8px 10px 8px 25px;
-    border-left: 1px solid #ffffff;
-    color: #999;
+    border-left: 1px solid $border-color;
+    color: $light-text-color;
     text-decoration: none;
   }
 
@@ -265,7 +265,7 @@ a.btn-common {
 
 a.btn-common:hover {
   background-color: $primary-color;
-  color: #ffffff;
+  color: $on-primary-color;
   text-decoration: none;
 }
 
@@ -406,7 +406,7 @@ a.sidebar-nav-item:focus {
 
 // Tag
 .post-tag {
-  background: #FFFBF0;
+  background: $tag-background;
   display: inline-block;
   padding: 0 5px;
   margin: 3px;
@@ -421,7 +421,7 @@ a.sidebar-nav-item:focus {
 .post-tag.select {
   text-decoration: none;
   background: $primary-color;
-  color: #ffffff;
+  color: $on-primary-color;
 }
 
 .tags-expo-section {
@@ -498,7 +498,7 @@ a.sidebar-nav-item:focus {
 
 // Search Page
 #search {
-  border: 1px solid #d9d9d9;
+  border: 1px solid $border-strong-color;
   padding: 2px 9px;
   line-height: 0px;
   border-radius: 20px;
@@ -533,7 +533,7 @@ a.sidebar-nav-item:focus {
 
 #results-preview blockquote {
   border-left: 4px solid $primary-color;
-  background-color: #ecc8c5;
+  background-color: rgba($primary-color, 0.14);
 }
 
 #results-preview em {
@@ -557,7 +557,7 @@ div#footnote-popup {
   max-width: 360px;
   box-shadow: 0 2px 15px 0 rgba(140, 144, 155, .5);
   padding: 16px 18px 0 18px;
-  background-color: #fff;
+  background-color: $background-color;
   will-change: transform, opacity;
   border-radius: 5px;
   overflow: auto;
@@ -660,7 +660,7 @@ div#footnote-popup {
 
 .fold-title {
   background-color: $primary-color;
-  color: #ffffff;
+  color: $on-primary-color;
   padding: 8px 15px;
   display: inline-block;
 }
@@ -705,19 +705,19 @@ div#footnote-popup {
 .article-expiration-warning {
   margin: 15px 0;
   padding: 10px 15px;
-  border-left: 4px solid #FFA500;
-  background-color: #fff9e6;
+  border-left: 4px solid $primary-color;
+  background-color: $panel-background;
   border-radius: 3px;
 }
 
 .expiration-warning {
   margin: 0;
-  color: #333;
+  color: $text-color;
   font-size: 14px;
 }
 
 .expiration-warning strong {
-  color: #FF8C00;
+  color: $primary-color;
 }
 
 // Related posts

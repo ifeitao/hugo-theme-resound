@@ -513,10 +513,15 @@ a.sidebar-nav-item:focus {
   height: 34px;
   width: 87%;
   background-color: transparent;
+  color: $text-color;
   left: 0px;
   outline: none;
   font-size: 16px;
   font-family: "PT Sans", Helvetica, Arial, "Hiragino Sans GB", "Microsoft Yahei", sans-serif;
+}
+
+#search-input::placeholder {
+  color: $light-text-color;
 }
 
 #search-icon {

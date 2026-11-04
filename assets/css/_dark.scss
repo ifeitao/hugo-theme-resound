@@ -12,6 +12,12 @@
   .container a { color: $dark-link-color; }
   .post-date, .tags-expo-section .post-date { color: $dark-muted-color; }
 
+  // Search page: the input has no colour of its own, so it fell back to the
+  // browser default (black) on a dark background.
+  #search { border-color: $dark-border-strong-color; }
+  #search-input { color: $dark-text-color; }
+  #search-input::placeholder { color: $dark-muted-color; }
+
   // Revision history selector
   .revision-history { background: $dark-panel-color; border-color: $dark-border-color; }
   .revision-history-label { color: $dark-muted-color; }

@@ -446,9 +446,10 @@ Light/dark still follows the system setting, and the "toggle dark mode" item in 
 sidebar overrides it.
 
 Every palette is compiled into its own stylesheet and shipped together (the inactive
-ones sit behind `media="not all"`), so the "switch palette" item in the sidebar swaps
-them in place and remembers the choice in localStorage. `palette` is only the default
-for a first visit. To go beyond the shipped palettes, edit the maps in
+ones sit behind `media="not all"`), so the palette dropdown in the sidebar swaps them in
+place and remembers the choice in localStorage. `palette` is only the default for a
+first visit. To add one, define its light/dark halves in `_theme-colors.scss` and append
+the name to the list in `layouts/partials/palette-names.html` — the dropdown follows. To go beyond the shipped palettes, edit the maps in
 `assets/css/_theme-colors.scss` or override the variables in custom CSS.
 
 ### Custom Font Configuration

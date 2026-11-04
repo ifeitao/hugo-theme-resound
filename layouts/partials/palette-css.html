@@ -1,0 +1,17 @@
+{{/*
+  Compile one palette into a stylesheet and return the fingerprinted resource.
+
+  Call: partial "palette-css.html" (dict "name" "secevo" "overrides" $overrides)
+
+  The generated SCSS is named after its content: Hugo caches compiled Sass by
+  resource name, so a fixed name would keep serving the previous palette.
+*/}}
+{{- $name := .name -}}
+{{- $overrides := .overrides | default "" -}}
+{{- $generatedScss := printf "$palette: %q;\n%s" $name $overrides -}}
+{{- $sig := md5 $generatedScss -}}
+{{- $dynamicVars := resources.FromString (printf "css/_generated-%s.scss" $sig) $generatedScss -}}
+{{- $mainScss := resources.Get "css/main.scss" -}}
+{{- $scssInput := slice $dynamicVars $mainScss | resources.Concat (printf "css/main-%s.generated.scss" $sig) -}}
+{{- $scssOptions := dict "targetPath" (printf "css/main-%s.css" $sig) "enableSourceMap" false -}}
+{{- return ($scssInput | css.Sass $scssOptions | resources.Minify | resources.Fingerprint) -}}

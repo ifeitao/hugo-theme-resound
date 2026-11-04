@@ -20,6 +20,9 @@ other = "搜索"
 [about]
 other = "关于"
 
+[togglePalette]
+other = "切换配色"
+
 [backToTop]
 other = "回到顶部"
 

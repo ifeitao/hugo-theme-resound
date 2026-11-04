@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.Language.LanguageCode }}">
+{{ $paletteNames := slice "resound" "secevo" }}
+{{ $paletteName := .Site.Params.palette | default "resound" }}
+{{ if not (in $paletteNames $paletteName) }}{{ $paletteName = "resound" }}{{ end }}
+<html lang="{{ .Site.Language.LanguageCode }}" data-palette="{{ $paletteName }}">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -11,28 +14,28 @@
             {{ .Title }} - {{ .Site.Title }}
         {{- end -}}
     </title>
-    <!-- CSS -->
-    {{/* Named palette: resound | secevo (see README). Unknown names fall back to resound. */}}
-    {{ $paletteName := .Site.Params.palette | default "resound" }}
+    <!-- CSS: every palette is compiled, all but the active one parked behind media="not all".
+         The switcher in the sidebar flips that media value, so no rebuild is needed to recolour. -->
     {{/* Per-site colour overrides. Not documented on purpose: a palette is the public way
          to recolour the theme, these six variables are only an escape hatch. */}}
-    {{ $generatedScss := printf "$palette: %q;\n" $paletteName }}
-    {{ with .Site.Params.theme_color }}{{ $generatedScss = printf "%s$primary-color: %s;\n" $generatedScss . }}{{ end }}
-    {{ with .Site.Params.secondary_color }}{{ $generatedScss = printf "%s$secondary-color: %s;\n" $generatedScss . }}{{ end }}
-    {{ with .Site.Params.link_color }}{{ $generatedScss = printf "%s$link-color: %s;\n" $generatedScss . }}{{ end }}
-    {{ with .Site.Params.theme_color_dark }}{{ $generatedScss = printf "%s$dark-primary-color: %s;\n" $generatedScss . }}{{ end }}
-    {{ with .Site.Params.secondary_color_dark }}{{ $generatedScss = printf "%s$dark-secondary-color: %s;\n" $generatedScss . }}{{ end }}
-    {{ with .Site.Params.link_color_dark }}{{ $generatedScss = printf "%s$dark-link-color: %s;\n" $generatedScss . }}{{ end }}
-    {{/* Prepend dynamically generated palette so SCSS uses configured colors */}}
-    {{/* Name the generated file after its content: Hugo caches compiled Sass by resource
-         name, so a fixed name would keep serving the previous palette after a config change. */}}
-    {{ $sig := md5 $generatedScss }}
-    {{ $dynamicVars := resources.FromString (printf "css/_generated-%s.scss" $sig) $generatedScss }}
-    {{ $mainScss := resources.Get "css/main.scss" }}
-    {{ $scssInput := slice $dynamicVars $mainScss | resources.Concat (printf "css/main-%s.generated.scss" $sig) }}
-    {{ $scssOptions := dict "targetPath" (printf "css/main-%s.css" $sig) "enableSourceMap" false }}
-    {{ $styles := $scssInput | css.Sass $scssOptions | resources.Minify | resources.Fingerprint }}
-    <link rel="stylesheet" href="{{ $styles.Permalink }}" integrity="{{ $styles.Data.Integrity }}" crossorigin="anonymous"> 
+    {{ $overrides := "" }}
+    {{ with .Site.Params.theme_color }}{{ $overrides = printf "%s$primary-color: %s;\n" $overrides . }}{{ end }}
+    {{ with .Site.Params.secondary_color }}{{ $overrides = printf "%s$secondary-color: %s;\n" $overrides . }}{{ end }}
+    {{ with .Site.Params.link_color }}{{ $overrides = printf "%s$link-color: %s;\n" $overrides . }}{{ end }}
+    {{ with .Site.Params.theme_color_dark }}{{ $overrides = printf "%s$dark-primary-color: %s;\n" $overrides . }}{{ end }}
+    {{ with .Site.Params.secondary_color_dark }}{{ $overrides = printf "%s$dark-secondary-color: %s;\n" $overrides . }}{{ end }}
+    {{ with .Site.Params.link_color_dark }}{{ $overrides = printf "%s$dark-link-color: %s;\n" $overrides . }}{{ end }}
+    {{ range $paletteNames }}
+    {{ $css := partial "palette-css.html" (dict "name" . "overrides" $overrides) }}
+    <link rel="stylesheet" href="{{ $css.Permalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous" data-palette="{{ . }}"{{ if ne . $paletteName }} media="not all"{{ end }}>
+    {{ end }}
+    <script>
+    /* Apply the palette the reader picked last time before the body paints. */
+    (function(){try{var s=localStorage.getItem('resound-palette');if(!s)return;
+      var l=document.querySelectorAll('link[data-palette]');
+      for(var i=0;i<l.length;i++){l[i].media=(l[i].getAttribute('data-palette')===s?'all':'not all');}
+      document.documentElement.setAttribute('data-palette',s);}catch(e){}})();
+    </script>
     {{ $syntax := resources.Get "css/_syntax.scss" | css.Sass | resources.Minify | resources.Fingerprint }}
     <link rel="stylesheet" href="{{ $syntax.Permalink }}" integrity="{{ $syntax.Data.Integrity }}" crossorigin="anonymous"> 
     {{ if .Site.Params.enable_lxgw_wenkai }}
@@ -48,8 +51,9 @@
     <link rel="manifest" href="/site.webmanifest">
     {{ $chromeColors := dict "resound" (dict "light" "#b82d23" "dark" "#121212") "secevo" (dict "light" "#f5f2ea" "dark" "#1e1e1c") }}
     {{ $chrome := or (index $chromeColors $paletteName) (index $chromeColors "resound") }}
-    <meta name="theme-color" content="{{ .Site.Params.theme_color | default $chrome.light }}" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="{{ .Site.Params.theme_color_dark | default $chrome.dark }}" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" id="theme-color-light" content="{{ .Site.Params.theme_color | default $chrome.light }}" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" id="theme-color-dark" content="{{ .Site.Params.theme_color_dark | default $chrome.dark }}" media="(prefers-color-scheme: dark)">
+    <script type="application/json" id="palette-chrome">{{ $chromeColors | jsonify }}</script>
     {{ partial "seo.html" . }}
     <!-- RSS Feed -->
     {{ with .OutputFormats.Get "rss" -}}

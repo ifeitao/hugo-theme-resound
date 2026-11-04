@@ -20,6 +20,9 @@ other = "Search"
 [about]
 other = "About"
 
+[togglePalette]
+other = "Switch palette"
+
 [backToTop]
 other = "Back to Top"
 

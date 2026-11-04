@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <title>次生进化 SecEvo Labs · 小尺寸图标</title>
+  <rect width="200" height="200" rx="44" fill="#1F4D3A"/>
+  <g transform="translate(100 100) scale(0.79)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 70.13 -49.77 A 86.00 86.00 0 1 1 49.77 -70.13" stroke="#F5F2EA" stroke-width="17.1"/>
+    <circle cx="-21.21" cy="21.21" r="22" fill="#D9472B" stroke="none"/>
+  </g>
+</svg>

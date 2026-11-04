@@ -319,6 +319,13 @@ a.btn-common:hover {
   white-space: nowrap;
 }
 
+// The palette item carries the palette's name too; let it wrap instead of clipping.
+.sidebar-nav-item-palette {
+  white-space: normal;
+  text-overflow: clip;
+  line-height: 1.35;
+}
+
 .sidebar-nav-item-sub {
   padding: 8px 5px 8px 15px;
   font-size: 14px;

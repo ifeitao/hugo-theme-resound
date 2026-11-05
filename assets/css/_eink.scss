@@ -1,0 +1,381 @@
+// E-ink refinements — the `eink` palette's second half.
+//
+// _theme-colors.scss strips every hue; this file replaces what the other
+// palettes say with tint. On a monochrome panel a light tint is either
+// invisible or dithered into mud, so here:
+//
+//   tinted surfaces      -> a 1px rule in ink
+//   colour-coded callouts-> one ink, four border shapes, same glyphs
+//   coloured syntax      -> a four-step grey ramp plus weight and italics
+//   selection            -> inverted: ink block, paper letters
+//   shadows              -> borders (a soft shadow just dithers)
+//
+// Modelled on Obsidian Minimal's e-ink scheme (white/black, no hue, high
+// contrast). Only the `eink` stylesheet carries these rules. The selectors are
+// prefixed with html[data-palette="eink"] so they also outrank _syntax.css,
+// which the theme loads as its own stylesheet after the palette one.
+
+@mixin eink-rules($ink, $paper, $soft, $faint) {
+  // Inverted selection and highlights: a block of ink with paper letters.
+  mark, ::selection {
+    color: $paper;
+    background-color: $ink;
+  }
+
+  // Native checkboxes follow the ink instead of the browser's blue. Their
+  // default paint is a grey well with an anti-aliased tick — mushy on e-ink —
+  // so draw a hairline box and an ink tick instead.
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 13px;
+    height: 13px;
+    margin-right: 4px;
+    vertical-align: -2px;
+    background: transparent;
+    border: 1px solid $ink;
+    border-radius: 2px;
+  }
+
+  input[type="checkbox"]:checked {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3.2 3.2L13 5' fill='none' stroke='%23#{str-slice("#{$ink}", 2)}' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+
+  input[type="radio"] {
+    accent-color: $ink;
+  }
+
+  // Code: a rule instead of a grey wash. Inline code leans on weight, as in
+  // Minimal, so it reads even when the border is too fine to resolve.
+  pre:not(.chroma),
+  .highlight {
+    background-color: $paper;
+    border: 1px solid $ink;
+  }
+
+  code {
+    padding: 1px 5px;
+    color: $ink;
+    background-color: transparent;
+    border: 1px solid $faint;
+    font-weight: 600;
+  }
+
+  pre code {
+    padding: 0;
+    border: 0;
+    font-weight: inherit;
+  }
+
+  // Quotes: the left rule carries them, no background.
+  blockquote {
+    background-color: transparent;
+    border-left-color: $ink;
+  }
+
+  #results-preview blockquote {
+    background-color: transparent;
+    border-left-color: $ink;
+  }
+
+  // Prose links: with no colour left to mark them, the underline is the mark.
+  // UI links (nav, tags, titles in lists) keep their bare look — context says
+  // they are links, and underlining the sidebar would be noise.
+  .post p a,
+  .post li a,
+  .post td a,
+  .post dd a,
+  .post blockquote a,
+  .page p a,
+  .page li a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  // Expiry banner reads as a notice, so give it a frame of its own.
+  .article-expiration-warning {
+    border: 1px solid $ink;
+    border-left: 4px solid $ink;
+    background-color: transparent;
+  }
+
+  // Code runs one step larger: 13px hairline monospace is the first thing to
+  // disappear on an e-ink panel.
+  pre,
+  .highlight,
+  code {
+    font-size: 14px;
+  }
+
+  pre,
+  .highlight {
+    line-height: 1.5;
+  }
+
+  // Tables: no zebra striping, heavier head rule instead.
+  tbody tr:nth-child(odd) td,
+  tbody tr:nth-child(odd) th {
+    background-color: transparent;
+  }
+
+  th {
+    border-bottom: 2px solid $ink;
+  }
+
+  // Tags: outlined, inverted on hover (both come from the palette's
+  // primary / on-primary, which are ink and paper here).
+  .post-tag {
+    padding: 0 6px;
+    background: transparent;
+    border: 1px solid $ink;
+    color: $ink;
+  }
+
+  .tags-expo-section .archive-year {
+    color: $ink;
+  }
+
+  // Callouts: monochrome, told apart by border shape and the existing glyph
+  // rather than by colour. The colour has to be restated here: the theme's
+  // light-mode rule pins callout text to the light ink and _dark.scss only
+  // ever overrode the background.
+  .warning, .note, .info, .tip {
+    padding-left: 40px;
+    border: 1px solid $ink;
+    border-left: 5px solid $ink;
+    background-color: transparent;
+    color: $ink;
+  }
+
+  .warning { border-left-style: solid; }
+  .note { border-left-style: dashed; }
+  .info { border-left-style: dotted; }
+  .tip { border-left-style: double; }
+
+  .warning:before, .note:before, .info:before, .tip:before {
+    left: 14px;
+    background-color: $ink;
+    color: $paper;
+  }
+
+  // Cards, popups, panels: borders, never shadows.
+  div#footnote-popup {
+    border: 1px solid $ink;
+    box-shadow: none;
+  }
+
+  .revision-history,
+  #markdown-toc {
+    background: transparent;
+    border-color: $ink;
+  }
+
+  .gallery-item,
+  .gallery-item:hover {
+    border: 1px solid $ink;
+    box-shadow: none;
+  }
+
+  // Dimming overlay: fade the page to paper, not to grey. A translucent black
+  // veil over white type is exactly the dithering e-ink cannot draw.
+  #overlay {
+    background-color: $paper;
+  }
+
+  #sidebar-checkbox:checked ~ #sidebar-toggle #overlay {
+    opacity: 0.88;
+  }
+
+  // TOC rail: hairlines, current section marked by weight as well as the rule.
+  .has-toc .nav li > a {
+    border-left-color: $faint;
+  }
+
+  .has-toc .nav > .active > a,
+  .has-toc .nav li > a:hover {
+    color: $ink;
+    border-left-color: $ink;
+    font-weight: 600;
+  }
+
+  // Sidebar is a solid ink panel in *both* modes (primary in the day palette,
+  // panel in the night one), so its text is white in both — $paper would turn
+  // black at night and paint black on black. The theme's 60–80% white
+  // hairlines are dialled up too: they dither on a monochrome screen.
+  .sidebar,
+  .sidebar-item {
+    color: #ffffff;
+  }
+
+  .sidebar a,
+  a.sidebar-nav-item,
+  .language-switcher .sidebar-nav-item {
+    color: #ffffff;
+  }
+
+  .sidebar-nav,
+  .sidebar-nav-item,
+  .language-switcher {
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+
+  .sidebar-controls-select {
+    border-color: rgba(255, 255, 255, 0.6);
+    background-color: transparent;
+  }
+
+  .language-switcher .sidebar-nav-item {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+  }
+
+  .language-switcher .sidebar-nav-item:hover,
+  .sidebar-nav-item.active,
+  a.sidebar-nav-item:hover,
+  a.sidebar-nav-item:focus {
+    background-color: rgba(255, 255, 255, 0.16);
+  }
+
+  // Syntax: grey ramp, weight and italics only.
+  .highlight {
+    color: $ink;
+    background-color: $paper;
+  }
+
+  .highlight pre {
+    background-color: transparent;
+  }
+
+  .highlight .err {
+    color: $ink;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+
+  .highlight .c,
+  .highlight .cd,
+  .highlight .cm,
+  .highlight .c1,
+  .highlight .cs,
+  .highlight .ch,
+  .highlight .cp {
+    color: $faint;
+    font-style: italic;
+  }
+
+  .highlight .cp,
+  .highlight .cs {
+    font-style: normal;
+  }
+
+  .highlight .k,
+  .highlight .kc,
+  .highlight .kd,
+  .highlight .kn,
+  .highlight .kp,
+  .highlight .kr,
+  .highlight .kt,
+  .highlight .kv,
+  .highlight .ow,
+  .highlight .o {
+    color: $ink;
+    font-weight: 700;
+  }
+
+  .highlight .s,
+  .highlight .sa,
+  .highlight .sb,
+  .highlight .sc,
+  .highlight .dl,
+  .highlight .sd,
+  .highlight .s2,
+  .highlight .se,
+  .highlight .sh,
+  .highlight .si,
+  .highlight .sx,
+  .highlight .sr,
+  .highlight .s1,
+  .highlight .ss,
+  .highlight .m,
+  .highlight .mb,
+  .highlight .mf,
+  .highlight .mh,
+  .highlight .mi,
+  .highlight .il,
+  .highlight .mo,
+  .highlight .mx,
+  .highlight .no {
+    color: $soft;
+  }
+
+  .highlight .na,
+  .highlight .nc,
+  .highlight .nd,
+  .highlight .ne,
+  .highlight .nf,
+  .highlight .nl {
+    color: $ink;
+    font-weight: 700;
+  }
+
+  .highlight .nb,
+  .highlight .bp,
+  .highlight .nn,
+  .highlight .nv,
+  .highlight .nt,
+  .highlight .gu,
+  .highlight .vc,
+  .highlight .vg,
+  .highlight .vi,
+  .highlight .ni {
+    color: $soft;
+  }
+
+  .highlight .gh,
+  .highlight .go,
+  .highlight .gp,
+  .highlight .gs,
+  .highlight .gr,
+  .highlight .gt {
+    color: $faint;
+  }
+
+  .highlight .ge {
+    color: $ink;
+    font-style: italic;
+  }
+
+  // Diff lines: strikethrough / bold instead of red and green.
+  .highlight .gd {
+    color: $ink;
+    background-color: transparent;
+    text-decoration: line-through;
+  }
+
+  .highlight .gi {
+    color: $ink;
+    background-color: transparent;
+    font-weight: 700;
+  }
+}
+
+@if $palette == "eink" {
+  // Day: ink on paper.
+  html[data-palette="eink"] {
+    @include eink-rules(#000000, #ffffff, #333333, #777777);
+  }
+
+  // Night: paper on ink, same rules with the ramp reversed.
+  @media (prefers-color-scheme: dark) {
+    html[data-palette="eink"]:not([data-theme="light"]) {
+      @include eink-rules(#ffffff, #000000, #cccccc, #8a8a8a);
+    }
+  }
+
+  html[data-palette="eink"][data-theme="dark"] {
+    @include eink-rules(#ffffff, #000000, #cccccc, #8a8a8a);
+  }
+}

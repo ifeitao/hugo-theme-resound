@@ -1,9 +1,10 @@
 // Colour palettes — every colour the theme paints comes from here.
 //
-// Two palettes ship with the theme, each with a light and a dark half:
+// Three palettes ship with the theme, each with a light and a dark half:
 //
 //   resound   warm brick red on white — the theme's original look
 //   secevo    evolution green on paper — the house palette of secevo.xyz
+//   eink      ink on paper, no colour at all — for monochrome displays
 //
 // `params.palette` picks one at build time (see README). A site that needs
 // something else can still inject $primary-color & friends through the
@@ -96,6 +97,50 @@ $palettes: (
       code-inline: #c7dcc9,
       tag-bg: rgba(169, 199, 180, 0.14),
       selection: #1f4d3a,
+    ),
+  ),
+  // E-ink: no hue anywhere. Pure ink on paper (light) and its negative (dark),
+  // after Obsidian Minimal's e-ink scheme. Structure that other palettes show
+  // with tint — tags, code, callouts, cards — is drawn with rules instead, so
+  // a 1-bit panel has nothing to dither. See _eink.scss for those rules.
+  eink: (
+    light: (
+      primary: #000000,
+      secondary: #000000,
+      link: #000000,
+      on-primary: #ffffff,
+      text: #000000,
+      muted: #555555,
+      strong: #000000,
+      quote: #333333,
+      bg: #ffffff,
+      panel: #ffffff,
+      border: #000000,
+      border-strong: #000000,
+      code-bg: #ffffff,
+      code-inline-bg: #ffffff,
+      code-inline: #000000,
+      tag-bg: transparent,
+      selection: #000000, // inverted by _eink.scss: ink block, paper letters
+    ),
+    dark: (
+      primary: #ffffff,
+      secondary: #ffffff,
+      link: #ffffff,
+      on-primary: #000000,
+      text: #ffffff,
+      muted: #b3b3b3,
+      strong: #ffffff,
+      quote: #e0e0e0,
+      bg: #000000,
+      panel: #000000,
+      border: #ffffff,
+      border-strong: #ffffff,
+      code-bg: #000000,
+      code-inline-bg: #000000,
+      code-inline: #ffffff,
+      tag-bg: transparent,
+      selection: #ffffff,
     ),
   ),
 );

@@ -21,3 +21,6 @@
 
 // Dark mode (must be last to override)
 @import "dark";
+
+// E-ink refinements, for the monochrome palette only
+@import "eink";

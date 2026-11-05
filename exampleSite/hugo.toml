@@ -12,6 +12,12 @@ theme = 'resound'
 [outputs]
   home = ["HTML", "RSS", "JSON"]
 
+# Syntax highlighting lives in the theme's stylesheets, so Hugo must emit classes
+# rather than inline colours (inline styles would outrank every palette).
+[markup.highlight]
+  noClasses = false
+  style = 'github'
+
 # Multi-language configuration
 [languages]
   [languages.zh-cn]
@@ -26,7 +32,7 @@ theme = 'resound'
   slogan = 'Make Your Content Resound - 让你的内容产生回响'
   author = 'Resound Theme'
   logo = '/logo.png'
-  # 'resound' (默认) 或 'secevo'，各自带日夜两套
+  # 'resound' (默认)、'secevo' 或 'eink'，各自带日夜两套
   palette = 'resound'
   addition = '</br>一个优雅的Hugo博客主题'
   

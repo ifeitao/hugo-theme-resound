@@ -49,7 +49,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="manifest" href="/site.webmanifest">
-    {{ $chromeColors := dict "resound" (dict "light" "#b82d23" "dark" "#121212") "secevo" (dict "light" "#f5f2ea" "dark" "#1e1e1c") }}
+    {{ $chromeColors := dict "resound" (dict "light" "#b82d23" "dark" "#121212") "secevo" (dict "light" "#f5f2ea" "dark" "#1e1e1c") "eink" (dict "light" "#ffffff" "dark" "#000000") }}
     {{ $chrome := or (index $chromeColors $paletteName) (index $chromeColors "resound") }}
     <meta name="theme-color" id="theme-color-light" content="{{ .Site.Params.theme_color | default $chrome.light }}" media="(prefers-color-scheme: light)">
     <meta name="theme-color" id="theme-color-dark" content="{{ .Site.Params.theme_color_dark | default $chrome.dark }}" media="(prefers-color-scheme: dark)">

@@ -24,6 +24,8 @@
     {{ if not (in $palettes $current) }}{{ $current = "resound" }}{{ end }}
     {{ $themeLabel := i18n "toggleTheme" | default "Toggle dark mode" }}
     {{ $paletteLabel := i18n "palette" | default "Palette" }}
+    {{/* Display names for the palette dropdown; a palette missing here shows its key. */}}
+    {{ $paletteLabels := dict "resound" "Resound" "secevo" "Secevo" "eink" "E-ink" }}
     <div class="sidebar-nav-item sidebar-controls">
       <a class="sidebar-control" href="#" id="theme-toggle" role="button" aria-label="{{ $themeLabel }}" title="{{ $themeLabel }}">
         <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -42,7 +44,7 @@
       </span>
       <select id="palette-select" class="sidebar-controls-select" aria-label="{{ $paletteLabel }}" title="{{ $paletteLabel }}">
         {{ range $palettes }}
-        <option value="{{ . }}"{{ if eq . $current }} selected{{ end }}>{{ . }}</option>
+        <option value="{{ . }}"{{ if eq . $current }} selected{{ end }}>{{ index $paletteLabels . | default . }}</option>
         {{ end }}
       </select>
     </div>

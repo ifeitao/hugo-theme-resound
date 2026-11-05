@@ -430,17 +430,25 @@ You can override styling via `.video-embed` in custom CSS.
 
 ### Theme Palette
 
-The theme ships two palettes, each with a light and a dark half:
+The theme ships three palettes, each with a light and a dark half:
 
 | palette | Light | Dark |
 |---|---|---|
 | `resound` (default) | brick-red headings on white | brick-red accents on `#121212` |
 | `secevo` | evolution green `#1F4D3A` on paper `#F5F2EA` | moss `#A9C7B4` accents on ink `#1E1E1C` |
+| `eink` | ink on paper, hairlines between | inverted: paper on ink |
 
 ```toml
 [params]
-  palette = 'secevo'   # resound or secevo, defaults to resound
+  palette = 'secevo'   # resound, secevo or eink; defaults to resound
 ```
+
+`eink` is for monochrome panels, after Obsidian Minimal's e-ink scheme: no hue anywhere,
+white with black type by day and its negative at night. Everything the other palettes show
+with a tint — tags, inline code, code blocks, callouts — is drawn with a 1px ink rule,
+weight, or the shape of the border instead (solid / dashed / dotted / double for
+warning / note / info / tip). Selection is inverted, shadows become borders, and there is
+no large grey field to dither on a 1-bit display.
 
 Light/dark still follows the system setting, and the "toggle dark mode" item in the
 sidebar overrides it.
@@ -451,6 +459,12 @@ place and remembers the choice in localStorage. `palette` is only the default fo
 first visit. To add one, define its light/dark halves in `_theme-colors.scss` and append
 the name to the list in `layouts/partials/palette-names.html` — the dropdown follows. To go beyond the shipped palettes, edit the maps in
 `assets/css/_theme-colors.scss` or override the variables in custom CSS.
+
+Code colours come from the theme too (`_syntax.scss` by day, the Monokai block in
+`_dark.scss` at night), so a site must set `[markup.highlight] noClasses = false`.
+With Hugo's default inline styles the colours are written onto the markup and outrank
+every stylesheet, which leaves dark code blocks on light palettes and no way for a
+monochrome palette to reach them.
 
 ### Custom Font Configuration
 

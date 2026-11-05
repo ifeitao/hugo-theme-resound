@@ -448,17 +448,23 @@ graph TD
 
 ### 主题配色
 
-主题内置两套配色，每套都自带日间与夜间两版：
+主题内置三套配色，每套都自带日间与夜间两版：
 
 | palette | 日间 | 夜间 |
 |---|---|---|
 | `resound`（默认） | 砖红标题，白底 | 砖红强调，`#121212` 底 |
 | `secevo` | 进化绿 `#1F4D3A`，宣纸白 `#F5F2EA` 底 | 苔绿 `#A9C7B4` 强调，墨黑 `#1E1E1C` 底 |
+| `eink` | 墨黑字，纯白底，墨线分隔 | 反相：白字黑底 |
 
 ```toml
 [params]
-  palette = 'secevo'   # resound 或 secevo，缺省为 resound
+  palette = 'secevo'   # resound / secevo / eink，缺省为 resound
 ```
+
+`eink` 面向单色屏（墨水屏、电子纸），照 Obsidian Minimal 的 e-ink 配色做的：全站没有色相，
+日间纯白底黑字、夜间纯黑底白字；标签、行内代码、代码块、提示框这些平时靠浅色底区分的地方，
+改用 1px 墨线、字重和边框形状区分（警告实线、注意虚线、提示点线、成功双线）；
+选中文字是反相块，阴影一律换成描边。没有灰底大色块，1-bit 屏上不会出现抖动噪点。
 
 日间／夜间仍跟随系统设置，也可以在侧边栏点「切换暗黑模式」手动覆盖。
 
@@ -467,6 +473,10 @@ graph TD
 `palette` 只是首次访问的默认值。再加一套配色，只需在 `_theme-colors.scss` 里写好日夜两半，
 再把名字加进 `layouts/partials/palette-names.html` 的列表，下拉框会自动多一项。想改到配色表以外，改 `assets/css/_theme-colors.scss`
 里的调色板，或在自定义 CSS 里覆盖变量。
+
+代码高亮的颜色也来自主题（`_syntax.scss` 管日间，`_dark.scss` 里的 Monokai 管夜间），
+所以站点配置里要写 `[markup.highlight] noClasses = false`。否则 Hugo 会把颜色写成行内样式，
+优先级高于所有样式表，日间配色下代码块就会一直是黑底的 Monokai。
 
 ### 自定义字体配置
 

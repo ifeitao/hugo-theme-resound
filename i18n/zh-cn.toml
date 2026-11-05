@@ -26,6 +26,9 @@ other = "切换暗黑模式"
 [palette]
 other = "配色"
 
+[language]
+other = "语言"
+
 [backToTop]
 other = "回到顶部"
 

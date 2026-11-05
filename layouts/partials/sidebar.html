@@ -69,14 +69,21 @@
       {{ i18n "rss" }}
     </a>
     
-    <!-- Language switcher -->
-    {{ if gt (len .AllTranslations) 1 }}
+    <!-- Language picker: every site language, falling back to that language's home
+         when the current page has no translation. -->
+    {{ $page := . }}
+    {{ if gt (len .Sites) 1 }}
     <div class="language-switcher">
-      {{ range .AllTranslations }}
-        {{ if ne $.Site.Language.Lang .Language.Lang }}
-          <a class="sidebar-nav-item" href="{{ .RelPermalink }}">{{ .Language.LanguageName }}</a>
-        {{ end }}
-      {{ end }}
+      <select id="language-select" class="sidebar-controls-select language-select" aria-label="{{ i18n "language" | default "Language" }}">
+        {{- range $site := .Sites }}
+          {{- $lang := $site.Language.Lang }}
+          {{- $href := $site.Home.RelPermalink }}
+          {{- range $page.AllTranslations }}
+            {{- if eq .Language.Lang $lang }}{{ $href = .RelPermalink }}{{ end }}
+          {{- end }}
+          <option value="{{ $href }}"{{ if eq $lang $page.Site.Language.Lang }} selected{{ end }}>{{ $site.Language.LanguageName }}</option>
+        {{- end }}
+      </select>
     </div>
     {{ end }}
   </nav>

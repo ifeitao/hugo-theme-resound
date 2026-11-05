@@ -533,6 +533,12 @@ a.sidebar-nav-item:focus {
   border-top: 1px solid rgba(255,255,255,.1);
 }
 
+.language-switcher .language-select {
+  width: 100%;
+  padding: 3px 4px;
+  font-size: 14px;
+}
+
 .language-switcher .sidebar-nav-item {
   display: inline-block;
   padding: 4px 8px;

@@ -26,6 +26,9 @@ other = "Toggle dark mode"
 [palette]
 other = "Palette"
 
+[language]
+other = "Language"
+
 [backToTop]
 other = "Back to Top"
 

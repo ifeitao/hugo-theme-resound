@@ -1,0 +1,87 @@
+# Japanese translations
+[home]
+other = "ホーム"
+
+[archive]
+other = "アーカイブ"
+
+[featured]
+other = "特集"
+
+[categories]
+other = "カテゴリ"
+
+[tags]
+other = "タグ"
+
+[search]
+other = "検索"
+
+[about]
+other = "このサイト"
+
+[toggleTheme]
+other = "ダークモードに切り替え"
+
+[palette]
+other = "配色"
+
+[language]
+other = "言語"
+
+[backToTop]
+other = "ページ上部へ"
+
+[friends]
+other = "リンク"
+
+[postedOn]
+other = "公開日"
+
+[updatedOn]
+other = "更新日"
+
+[expireWarning]
+other = "この記事は古くなっています：最終更新は %s（%d 年以上前）です。内容が古い可能性がありますのでご注意ください。"
+
+[relatedPosts]
+other = "関連記事"
+
+[readingTime]
+other = "{{ .Count }} 分で読めます"
+
+[tableOfContents]
+other = "目次"
+
+[next]
+other = "次へ"
+
+[previous]
+other = "前へ"
+
+[projects]
+other = "プロジェクト"
+
+[latestPosts]
+other = "最新の記事"
+
+[moreArticles]
+other = "その他の記事"
+
+[rss]
+other = "RSS フィード"
+
+[galleryPrev]
+other = "前へ"
+
+[galleryNext]
+other = "次へ"
+
+[galleryClose]
+other = "閉じる"
+
+[galleryEmpty]
+other = "画像がありません。本文に Markdown の画像（ローカルまたは外部）を挿入するとギャラリーになります。"
+
+[revisionHistory]
+other = "バージョン"

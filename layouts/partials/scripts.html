@@ -77,6 +77,12 @@
   } catch (err) { /* noop */ }
 })();
 
+(function(){ // language picker: plain navigation, the target is baked into the option
+  var sel = document.getElementById('language-select');
+  if (!sel) return;
+  sel.addEventListener('change', function(){ if (this.value) window.location.href = this.value; });
+})();
+
 (function(){ // palette toggle: swap the active stylesheet, remember the choice
   var root = document.documentElement;
   var links = [].slice.call(document.querySelectorAll('link[data-palette]'));

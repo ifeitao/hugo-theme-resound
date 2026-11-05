@@ -20,6 +20,9 @@ other = "搜索"
 [about]
 other = "关于"
 
+[toggleTheme]
+other = "切换暗黑模式"
+
 [palette]
 other = "配色"
 

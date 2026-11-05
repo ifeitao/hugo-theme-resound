@@ -20,6 +20,9 @@ other = "Search"
 [about]
 other = "About"
 
+[toggleTheme]
+other = "Toggle dark mode"
+
 [palette]
 other = "Palette"
 

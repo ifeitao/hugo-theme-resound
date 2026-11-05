@@ -319,34 +319,66 @@ a.btn-common:hover {
   white-space: nowrap;
 }
 
-// Palette picker: a native select so adding palettes needs no new UI.
-.sidebar-palette {
+// Mode + palette: one row, icons only. Two glyphs and a native select, so a
+// new palette still needs no new UI.
+.sidebar-controls {
   display: flex;
   align-items: center;
+  gap: 8px;
+  padding-left: 18px;
+  padding-right: 10px;
   white-space: normal;
   text-overflow: clip;
 }
 
-.sidebar-palette-label {
-  margin-right: 6px;
-  white-space: nowrap;
+.sidebar-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: inherit;
 }
 
-.sidebar-palette-select {
+a.sidebar-control:hover,
+a.sidebar-control:focus {
+  text-decoration: none;
+  color: #fff;
+}
+
+.sidebar-control svg {
+  display: block;
+}
+
+// Moon in light mode (click = go dark), sun in dark mode.
+.sidebar-controls .icon-sun { display: none; }
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .sidebar-controls .icon-moon { display: none; }
+  html:not([data-theme="light"]) .sidebar-controls .icon-sun { display: block; }
+}
+
+html[data-theme="dark"] .sidebar-controls .icon-moon { display: none; }
+html[data-theme="dark"] .sidebar-controls .icon-sun { display: block; }
+html[data-theme="light"] .sidebar-controls .icon-sun { display: none; }
+html[data-theme="light"] .sidebar-controls .icon-moon { display: block; }
+
+.sidebar-controls-select {
   flex: 1;
   min-width: 0;
-  padding: 2px 4px;
+  padding: 1px 2px;
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.1);
   color: inherit;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.4;
   cursor: pointer;
 }
 
-.sidebar-palette-select option {
+.sidebar-controls-select option {
   color: #1e1e1c;
   background-color: #f5f2ea;
 }

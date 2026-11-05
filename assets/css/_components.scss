@@ -274,7 +274,7 @@ a.btn-common:hover {
   position: fixed;
   top: 0;
   bottom: 0;
-  width: 180px;
+  width: $sidebar-width;
   z-index: 10;
   visibility: hidden;
   overflow-y: auto;
@@ -286,7 +286,7 @@ a.btn-common:hover {
   -webkit-transition: all 0.3s ease;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 10px, rgba(0, 0, 0, 0.2) 0px 3px 10px;
   left: auto;
-  right: -180px;
+  right: -$sidebar-width;
   background-color: $primary-color;
 }
 
@@ -464,8 +464,8 @@ a.sidebar-nav-item:focus {
 }
 
 #sidebar-checkbox:checked ~ .sidebar {
-  transform: translateX(-180px);
-  -webkit-transform: translateX(-180px);
+  transform: translateX(-$sidebar-width);
+  -webkit-transform: translateX(-$sidebar-width);
 }
 
 // Tag
